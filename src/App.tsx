@@ -3,43 +3,27 @@ import './App.css';
 import Header from "./components/Header/Header";
 import Navbar from "./components/Navbar/Navbar";
 import Profile from "./components/Profile/Profile";
-import Dialogs from "./components/Dialodgs/Dialogs";
 import {BrowserRouter, Route} from "react-router-dom";
 import Music from "./components/Music/Music";
 import News from "./components/News/News";
 import Settings from "./components/Settings/Settings";
+import {RootStateType} from "./redux/state";
+import Messages from "./components/Messages/Messages";
 
-export type MyDataType = {
-    posts?: PostsType[]
-    dialogs?: DialogItemType[]
-    messages?: MessageType[]
+type AppPropsType ={
+    state:RootStateType
+    addPost:(postMessage: string) => void
 }
 
-type PostsType = {
-    id?: number
-    message: string
-    likeCount: number
-}
-
-export type DialogItemType = {
-    name: string
-    id: number
-}
-
-export type MessageType = {
-    message: string
-    // id: number
-}
-
-const App:React.FC<MyDataType> = ({posts, dialogs, messages}) => {
+const App:React.FC<AppPropsType> = ({state, addPost}) => {
     return (
         <BrowserRouter>
             <div className='app-wrapper'>
                 <Header/>
                 <Navbar/>
-                <div className='app-wrapper__content'>
-                    <Route path={'/Dialogs'} render={() => <Dialogs dialogs={dialogs} messages={messages}/>}/>
-                    <Route path={'/Profile'} render={() => <Profile posts={posts}/>}/>
+                <div className='app-wrapper__content'>                    
+                    <Route path={'/Messages'} render={() => <Messages messagesPage={state.messagesPage}/>}/>
+                    <Route path={'/Profile'} render={() => <Profile profilePage={state.profilePage} addPost={addPost}/>}/>
                     <Route path={'/News'} render={() => <News/>}/>
                     <Route path={'/Music'} render={() => <Music/>}/>
                     <Route path={'/Settings'} render={() => <Settings/>}/>
