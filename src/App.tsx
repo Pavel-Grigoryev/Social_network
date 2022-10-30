@@ -7,23 +7,24 @@ import {BrowserRouter, Route} from "react-router-dom";
 import Music from "./components/Music/Music";
 import News from "./components/News/News";
 import Settings from "./components/Settings/Settings";
-import {RootStateType} from "./redux/state";
+import {ActionsTypes, RootStateType} from "./redux/store";
 import Messages from "./components/Messages/Messages";
 
 type AppPropsType ={
     state:RootStateType
-    addPost:(postMessage: string) => void
+    dispatch:(action: ActionsTypes) => void
 }
 
-const App:React.FC<AppPropsType> = ({state, addPost}) => {
+const App:React.FC<AppPropsType> = ({state, dispatch}) => {
+    debugger
     return (
         <BrowserRouter>
             <div className='app-wrapper'>
                 <Header/>
                 <Navbar/>
                 <div className='app-wrapper__content'>                    
-                    <Route path={'/Messages'} render={() => <Messages messagesPage={state.messagesPage}/>}/>
-                    <Route path={'/Profile'} render={() => <Profile profilePage={state.profilePage} addPost={addPost}/>}/>
+                    <Route path={'/Messages'} render={() => <Messages messagesPage={state.messagesPage} dispatch={dispatch}/>}/>
+                    <Route path={'/Profile'} render={() => <Profile profilePage={state.profilePage} dispatch={dispatch} />}/>
                     <Route path={'/News'} render={() => <News/>}/>
                     <Route path={'/Music'} render={() => <Music/>}/>
                     <Route path={'/Settings'} render={() => <Settings/>}/>

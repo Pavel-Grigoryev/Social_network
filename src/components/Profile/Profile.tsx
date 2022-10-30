@@ -2,20 +2,23 @@ import React from "react";
 import s from './Profile.module.css'
 import MyPosts from "./MyPosts/MyPosts";
 import ProfileInfo from "./ProfileInfo/ProfileInfo";
-import {ProfilePageType} from "../../redux/state";
+import {ActionsTypes, ProfilePageType} from "../../redux/store";
 
 
 type ProfilePropsType = {
     profilePage: ProfilePageType
-    addPost:(postMessage: string) => void
+    dispatch:(action: ActionsTypes) => void
 }
 
-const Profile: React.FC<ProfilePropsType> = ({profilePage, addPost}) => {
+const Profile: React.FC<ProfilePropsType> = ({profilePage, dispatch}) => {
 
     return (
         <main>
             <ProfileInfo/>
-            <MyPosts posts={profilePage.posts} addPost={addPost}/>
+            <MyPosts posts={profilePage.posts}
+                     dispatch={dispatch}
+                     newPostText={profilePage.newPostText}
+                      />
         </main>
     );
 }
