@@ -1,37 +1,26 @@
-import React from "react";
+import React, {ChangeEvent} from "react";
 import s from './MyPosts.module.css'
 import Post from "./Post/Post";
-import {ActionsTypes, PostType} from "../../../redux/store";
-import {addPostActionCreator, updateNewPostActionCreator} from "../../../redux/profile-reducer";
+import {ProfileMyPostsType} from "./MyPostsContainer";
 
-
-type ProfileMyPostsType = {
-    posts: PostType[]
-    dispatch: (action: ActionsTypes) => void
-    newPostText: string
-}
-
-const MyPosts: React.FC<ProfileMyPostsType> = ({posts, newPostText, dispatch}) => {
+const MyPosts: React.FC<ProfileMyPostsType> = ({posts, newPostText, addPost, updateNewPost}) => {
 
     const postsElement = posts.map(post => (<Post key={post.id} message={post.message} likeCount={post.likeCount}/>))
 
-    let newPostElement = React.createRef<HTMLTextAreaElement>();
-
     const addPostHandler = () => {
-        dispatch(addPostActionCreator());
+        addPost();
     }
 
-    const onPostChange = () => {
-        if (newPostElement.current) {
-            dispatch(updateNewPostActionCreator(newPostElement.current.value));
+    const onPostChangeHandler = (e: ChangeEvent<HTMLTextAreaElement>) => {
+           updateNewPost(e.currentTarget.value);
         }
-    }
+
     return (
         <div className={s.postsBlock}>
             <h3>My posts</h3>
             <div className={s.postArea}>
                 <div>
-                    <textarea onChange={onPostChange} ref={newPostElement}
+                    <textarea onChange={onPostChangeHandler}
                               value={newPostText}
                     />
                 </div>

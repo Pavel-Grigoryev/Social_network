@@ -12,13 +12,13 @@ type DialogsItemType = {
     id: number
 };
 
-export type PostType = {
+type PostType = {
     id: number
     message: string
     likeCount: number
 };
 
-export type MessagesPageType = {
+type MessagesPageType = {
     dialogs: DialogsItemType[]
     messages: MessageType[]
     newMessageBody: string
