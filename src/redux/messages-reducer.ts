@@ -49,8 +49,6 @@ const messagesReducer = (state = initialState, action: ActionsTypes): MessagesPa
             return {...state, newMessageBody: state.newMessageBody = action.body}
         case "SEND-MESSAGE":
             let body = state.newMessageBody;
-            // state.messages.push({id: 6, message: body})
-            // state.newMessageBody = '';
             return {...state,
                 messages:  [...state.messages, {id: 6, message: body}],
                 newMessageBody: ''
