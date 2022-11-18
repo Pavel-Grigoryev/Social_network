@@ -1,6 +1,6 @@
 import React from "react";
 
-import {MessagesPageType, sendMessageCreator, updateNewMessageBodyCreator} from "../../redux/messages-reducer";
+import {MessagesPageType, sendMessageAC, updateNewMessageBodyAC} from "../../redux/messages-reducer";
 import {AppStateType} from "../../redux/redux-store";
 import Messages from "./Messages";
 import {connect} from "react-redux";
@@ -46,10 +46,10 @@ const mapStateToProps = (state: AppStateType): MapStateToPropsType => {
 const mapDispatchToProps = (dispatch: Dispatch): mapDispatchToPropsType => {
     return {
         sendMessage: () => {
-            dispatch(sendMessageCreator())
+            dispatch(sendMessageAC())
         },
         updateNewMessageBody: (body: string) => {
-            dispatch(updateNewMessageBodyCreator(body));
+            dispatch(updateNewMessageBodyAC(body));
         }
     }
 }

@@ -1,4 +1,4 @@
-import messagesReducer, {sendMessageCreator, updateNewMessageBodyCreator} from "./messages-reducer";
+import messagesReducer, {sendMessageAC, updateNewMessageBodyAC} from "./messages-reducer";
 import profileReducer, {addPostActionCreator, updateNewPostActionCreator} from "./profile-reducer";
 import sidebarReducer from "./sidebar-reducer";
 
@@ -28,7 +28,8 @@ export type ProfilePageType = {
     posts: PostType[]
     newPostText: string
 };
-export type SidebarType = {};
+
+type SidebarType = {};
 
 export type RootStateType = {
     messagesPage: MessagesPageType
@@ -45,11 +46,11 @@ export type StoreType = {
     dispatch: (action: ActionsTypes) => void
 }
 
-export type ActionsTypes =
+ type ActionsTypes =
     ReturnType<typeof addPostActionCreator>
     | ReturnType<typeof updateNewPostActionCreator>
-    | ReturnType<typeof sendMessageCreator>
-    | ReturnType<typeof updateNewMessageBodyCreator>;
+    | ReturnType<typeof sendMessageAC>
+    | ReturnType<typeof updateNewMessageBodyAC>;
 
 let store: StoreType = {
     _state: {
@@ -91,16 +92,17 @@ let store: StoreType = {
     },
     dispatch(action) {
 
-        this._state.messagesPage = messagesReducer(this._state.messagesPage, action);
+     /*   this._state.messagesPage = messagesReducer(this._state.messagesPage, action);
         this._state.profilePage = profileReducer(this._state.profilePage, action);
         this._state.sidebar = sidebarReducer(this._state.sidebar, action);
-        this._callSubscriber();
+        this._callSubscriber();*/
 
     }
 }
 
 export default store;
-// window.store = store;
+
+window.store = store;
 
 
 

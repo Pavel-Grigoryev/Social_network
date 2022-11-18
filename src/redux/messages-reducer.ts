@@ -1,12 +1,13 @@
-import {ActionsTypes} from "./store";
 
-export const sendMessageCreator = () => ({type: "SEND-MESSAGE"}) as const;
+export const sendMessageAC = () => ({type: "SEND-MESSAGE"}) as const;
 
-export const updateNewMessageBodyCreator = (body: string) => (
+export const updateNewMessageBodyAC = (body: string) => (
     {
         type: "UPDATE-NEW-MESSAGE-BODY",
         body: body
     }) as const;
+
+type ActionsTypes = ReturnType<typeof sendMessageAC> | ReturnType<typeof updateNewMessageBodyAC>
 
 type MessageType = {
     message: string
@@ -42,7 +43,7 @@ let  initialState: MessagesPageType = {
     newMessageBody: ""
 }
 
-const messagesReducer = (state = initialState, action: ActionsTypes): MessagesPageType => {
+export const messagesReducer = (state = initialState, action: ActionsTypes): MessagesPageType => {
 
     switch (action.type) {
         case "UPDATE-NEW-MESSAGE-BODY":

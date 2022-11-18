@@ -2,20 +2,15 @@ import {combineReducers, createStore} from "redux";
 import profileReducer from "./profile-reducer";
 import messagesReducer from "./messages-reducer";
 import sidebarReducer from "./sidebar-reducer";
-import {ActionsTypes, RootStateType} from "./store";
+import usersReducer from "./users-reducer";
 
-export type StoreReduxType = {
-    getState: () => RootStateType
-    subscribe: (observer:
-                    () => void) => void
-    dispatch: (action: ActionsTypes) => void
-}
 
 
 let rootReduser = combineReducers({
     profilePage: profileReducer,
     messagesPage: messagesReducer,
-    sidebar: sidebarReducer
+    sidebar: sidebarReducer,
+    usersPage: usersReducer
 })
 
 // state All application
