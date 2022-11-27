@@ -38,7 +38,10 @@ beforeEach(() => {
                 status: "I am a pupil",
                 location: {city: "Minsk", country: "Belarus"}
             }
-        ]
+        ],
+        pageSize: 5,
+        totalUsersCount: 0,
+        currentPage: 1
     }
 })
 
@@ -65,7 +68,10 @@ test('user should unfollow', () => {
 
 test('users array should be added to initial state', () => {
     const startStateEmpty: InitialStateType = {
-        users: []
+        users: [],
+        pageSize: 5,
+        totalUsersCount: 0,
+        currentPage: 1
     }
 
     const action = setUsersAC(startStateEmpty.users);
