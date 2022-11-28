@@ -1,4 +1,4 @@
-import userReducer, {followAC, InitialStateType, setUsersAC, unfollowAC} from "./users-reducer";
+import userReducer, {follow, InitialStateType, setUsers, unfollow} from "./users-reducer";
 
 let startState: InitialStateType;
 
@@ -41,14 +41,15 @@ beforeEach(() => {
         ],
         pageSize: 5,
         totalUsersCount: 0,
-        currentPage: 1
+        currentPage: 1,
+        isFetching: false
     }
 })
 
 
 test('user should follow', () => {
 
-    const action = followAC(3);
+    const action = follow(3);
 
     const endState = userReducer(startState, action)
 
@@ -58,7 +59,7 @@ test('user should follow', () => {
 
 test('user should unfollow', () => {
 
-    const action = unfollowAC(1);
+    const action = unfollow(1);
 
     const endState = userReducer(startState, action)
 
@@ -71,10 +72,11 @@ test('users array should be added to initial state', () => {
         users: [],
         pageSize: 5,
         totalUsersCount: 0,
-        currentPage: 1
+        currentPage: 1,
+        isFetching: false
     }
 
-    const action = setUsersAC(startStateEmpty.users);
+    const action = setUsers(startStateEmpty.users);
 
     const endState = userReducer(startState, action)
 
