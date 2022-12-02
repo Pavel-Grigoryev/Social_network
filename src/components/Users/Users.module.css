@@ -5,3 +5,8 @@
 .selectPage {
     font-weight: 700;
 }
+
+.pagesBlock {
+    display: flex;
+    flex-wrap: wrap;
+}
