@@ -42,7 +42,8 @@ beforeEach(() => {
         pageSize: 5,
         totalUsersCount: 0,
         currentPage: 1,
-        isFetching: false
+        isFetching: false,
+        followingInProgress: []
     }
 })
 
@@ -73,7 +74,8 @@ test('users array should be added to initial state', () => {
         pageSize: 5,
         totalUsersCount: 0,
         currentPage: 1,
-        isFetching: false
+        isFetching: false,
+        followingInProgress: []
     }
 
     const action = setUsers(startStateEmpty.users);
