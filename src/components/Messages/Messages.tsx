@@ -3,10 +3,11 @@ import s from './Messages.module.css'
 import MessageItem from "./MessagesItem/MessagesItem";
 import Message from "./Message/Message";
 import {MessagesPropsType} from "./MessagesContainer";
+import {Redirect} from "react-router-dom";
 
 
 
-const Messages: React.FC<MessagesPropsType> = ({messagesPage, updateNewMessageBody, sendMessage}) => {
+const Messages: React.FC<MessagesPropsType> = ({messagesPage, updateNewMessageBody, sendMessage, isAuth}) => {
 
     const MessageItemElement = messagesPage.dialogs.map(dialog => (
         <MessageItem key={dialog.id} name={dialog.name} id={dialog.id}/>));
@@ -20,6 +21,10 @@ const Messages: React.FC<MessagesPropsType> = ({messagesPage, updateNewMessageBo
 
     const onSendMessageClickHandler = () => {
         sendMessage();
+    }
+
+    if (!isAuth) {
+        return <Redirect to={'/login'}/>
     }
 
     return (

@@ -6,28 +6,9 @@ import Messages from "./Messages";
 import {connect} from "react-redux";
 import {Dispatch} from "redux";
 
-
-
-/*type MessageContainerPropsType = {
-    store: StoreReduxType
-}*/
-
-/*export const MessagesContainer1 = () => {
-
-    const onNewMessageChange = (body: string) => {
-        store.dispatch(updateNewMessageBodyCreator(body));
-    }
-
-    const onSendMessageClick = () => {
-        store.dispatch(sendMessageCreator());
-    }
-
-    return <Messages messagesPage={store.getState().messagesPage} sendMessage={onSendMessageClick}
-                     updateNewMessageBody={onNewMessageChange}/>
-}*/
-
 type MapStateToPropsType = {
     messagesPage: MessagesPageType
+    isAuth: boolean
 }
 
 type mapDispatchToPropsType = {
@@ -39,7 +20,8 @@ export type MessagesPropsType = MapStateToPropsType & mapDispatchToPropsType;
 
 const mapStateToProps = (state: AppStateType): MapStateToPropsType => {
     return {
-        messagesPage: state.messagesPage
+        messagesPage: state.messagesPage,
+        isAuth: state.auth.isAuth
     }
 }
 
