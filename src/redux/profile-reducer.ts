@@ -1,5 +1,6 @@
+import {Dispatch} from "redux";
+import {profileAPI} from "../api/api";
 
-export const addPostActionCreator = () => ({type: "ADD-POST"}) as const;
 
 export type ProfileType = {
     aboutMe: string
@@ -23,6 +24,8 @@ export type ProfileType = {
     }
 }
 
+export const addPostActionCreator = () => ({type: "ADD-POST"}) as const;
+
 export const updateNewPost = (newText: string) => (
     {
         type: "UPDATE-NEW-POST-TEXT",
@@ -35,7 +38,15 @@ export const setUserProfile = (profile: ProfileType) => (
         profile
     }) as const;
 
-type ActionsTypes = ReturnType<typeof addPostActionCreator> | ReturnType<typeof updateNewPost> | ReturnType<typeof setUserProfile>
+export const getUserProfile = (userId: number) => {
+    return (dispatch: Dispatch<ActionsTypesProfile>) => {
+        profileAPI.getProfile(userId).then((data) => {
+            dispatch(setUserProfile(data));
+        });
+    }
+}
+
+type ActionsTypesProfile = ReturnType<typeof addPostActionCreator> | ReturnType<typeof updateNewPost> | ReturnType<typeof setUserProfile>
 
 
 export type PostType = {
@@ -57,7 +68,7 @@ let initialState = {
 export type InitialStateType = typeof initialState;
 
 
-export const profileReducer = (state = initialState, action: ActionsTypes): InitialStateType => {
+export const profileReducer = (state = initialState, action: ActionsTypesProfile): InitialStateType => {
     switch (action.type) {
         case 'ADD-POST': {
             let newPost: PostType = {
