@@ -38,6 +38,36 @@ export const setUserProfile = (profile: ProfileType) => (
         profile
     }) as const;
 
+export const setUserStatusAC = (status: string) => (
+    {
+        type: "SET-USER-STATUS",
+        status
+    }) as const;
+
+export const changeUserStatusAC = (status: string) => (
+    {
+        type: "CHANGE-USER-STATUS",
+        status
+    }) as const;
+
+export const getUserStatus = (userId: number) => {
+    return (dispatch: Dispatch<ActionsTypesProfile>) => {
+        profileAPI.getStatus(userId).then((res) => {
+            dispatch(setUserStatusAC(res.data));
+        });
+    }
+}
+
+export const changeUserStatus = (status: string) => {
+    return (dispatch: Dispatch<ActionsTypesProfile>) => {
+        profileAPI.changeStatus(status).then((res) => {
+            if (res.data.resultCode === 0) {
+                dispatch(changeUserStatusAC(status));
+            }
+        });
+    }
+}
+
 export const getUserProfile = (userId: number) => {
     return (dispatch: Dispatch<ActionsTypesProfile>) => {
         profileAPI.getProfile(userId).then((data) => {
@@ -46,7 +76,10 @@ export const getUserProfile = (userId: number) => {
     }
 }
 
-type ActionsTypesProfile = ReturnType<typeof addPostActionCreator> | ReturnType<typeof updateNewPost> | ReturnType<typeof setUserProfile>
+
+
+
+type ActionsTypesProfile = ReturnType<typeof addPostActionCreator> | ReturnType<typeof updateNewPost> | ReturnType<typeof setUserProfile> | ReturnType<typeof setUserStatusAC> | ReturnType<typeof changeUserStatusAC>
 
 
 export type PostType = {
@@ -62,7 +95,8 @@ let initialState = {
         {id: 3, message: "The weather is good.", likeCount: 30}
     ] as PostType[],
     newPostText: "",
-    profile: null as ProfileType | null
+    profile: null as ProfileType | null,
+    status: ''
 }
 
 export type InitialStateType = typeof initialState;
@@ -86,6 +120,10 @@ export const profileReducer = (state = initialState, action: ActionsTypesProfile
         case "SET-USER-PROFILE": {
             return {...state, profile: action.profile};
         }
+        case "SET-USER-STATUS":
+            return {...state, status: action.status}
+        case "CHANGE-USER-STATUS":
+            return {...state, status: action.status}
         default:
             return state;
     }

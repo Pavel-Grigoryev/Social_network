@@ -1,7 +1,7 @@
 import profileReducer, {
     addPostActionCreator,
     InitialStateType,
-    PostType, ProfileType,
+    PostType,
     updateNewPost
 } from "./profile-reducer";
 
@@ -14,7 +14,8 @@ test('new text should be assigned a newPostText', () => {
             {id: 3, message: "The weather is good.", likeCount: 30}
         ] as PostType[],
         newPostText: "",
-        profile: null
+        profile: null,
+        status: ''
     }
 
     const action = updateNewPost('Ho-ho-ho');
@@ -34,7 +35,8 @@ test('new post text should be added in messages array', () => {
             {id: 3, message: "The weather is good.", likeCount: 30}
         ] as PostType[],
         newPostText: "Ho-ho-ho",
-        profile: null
+        profile: null,
+        status: ''
     }
 
     const action = addPostActionCreator();

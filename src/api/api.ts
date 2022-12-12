@@ -2,7 +2,7 @@ import axios from "axios";
 import {UserType} from "../redux/users-reducer";
 import {ProfileType} from "../redux/profile-reducer";
 
-type CommonResponseType<T> = {
+type CommonResponseType<T = {}> = {
     resultCode: number
     messages: Array<string>
     data: T
@@ -23,7 +23,10 @@ type AuthUserResponseDataType = {
 
 const instance = axios.create({
     withCredentials: true,
-    baseURL: 'https://social-network.samuraijs.com/api/1.0/'
+    baseURL: 'https://social-network.samuraijs.com/api/1.0/',
+    headers: {
+        'API-KEY': '924cb8b4-087a-45b1-8c8f-f88504975a06',
+    }
 })
 
 export const usersAPI = {
@@ -35,7 +38,7 @@ export const usersAPI = {
     },
 
     followUser (userId: number) {
-        return instance.post<CommonResponseType<{}>>(`follow/${userId}`).then((response) => {
+        return instance.post<CommonResponseType>(`follow/${userId}`).then((response) => {
             if (response.data.resultCode == 0) {
               return response.data.data
             }
@@ -43,7 +46,7 @@ export const usersAPI = {
     },
 
     unfollowUser (userId: number) {
-        return instance.delete<CommonResponseType<{}>>(`follow/${userId}`).then((response) => {
+        return instance.delete<CommonResponseType>(`follow/${userId}`).then((response) => {
             if (response.data.resultCode == 0) {
                 return response.data.data
             }
@@ -56,6 +59,14 @@ export const profileAPI = {
         return instance.get<ProfileType>(`profile/${userId}`).then((response) => {
             return response.data
         });
+    },
+
+    getStatus(userId: number) {
+        return instance.get<string>(`profile/status/${userId}`)
+    },
+
+    changeStatus(status: string) {
+        return instance.put<CommonResponseType>(`profile/status`, {status})
     }
 }
 
