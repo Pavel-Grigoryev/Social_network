@@ -8,7 +8,6 @@ type ProfilePropsType = {
 }
 
 const Profile = (props: ProfilePropsType) => {
-
     return (
         <main>
             <ProfileInfo profile={props.profile}/>
