@@ -1,25 +1,7 @@
 import axios from "axios";
 import {UserType} from "../redux/users-reducer";
 import {ProfileType} from "../redux/profile-reducer";
-
-type CommonResponseType<T = {}> = {
-    resultCode: number
-    messages: Array<string>
-    data: T
-}
-
-type usersResponseType = {
-    items: Array<UserType>
-    totalCount: number
-    error: string
-}
-
-type AuthUserResponseDataType = {
-        userId: number
-        email: string
-        login: string
-}
-
+import {LoginFormDataType} from "../components/Login/Login";
 
 const instance = axios.create({
     withCredentials: true,
@@ -71,12 +53,42 @@ export const profileAPI = {
 }
 
 export const authUserAPI = {
-    getAuthUserData() {
+    me() {
         return instance.get<CommonResponseType<AuthUserResponseDataType>>(`auth/me`
         ).then((response) => {
             if (response.data.resultCode === 0) {
                 return response.data.data;
             }
         });
+    },
+    login(dataForm: LoginFormDataType) {
+        return instance.post<CommonResponseType<AuthUserLoginResponseDataType>>(`auth/login`, dataForm);
+    },
+    logout(dataForm: LoginFormDataType) {
+        return instance.delete<CommonResponseType>(`auth/login`);
     }
+}
+
+//Types
+
+type CommonResponseType<T = {}> = {
+    resultCode: number
+    messages: Array<string>
+    data: T
+}
+
+type usersResponseType = {
+    items: Array<UserType>
+    totalCount: number
+    error: string
+}
+
+type AuthUserResponseDataType = {
+    userId: number
+    email: string
+    login: string
+}
+
+type AuthUserLoginResponseDataType = {
+    userId: number
 }

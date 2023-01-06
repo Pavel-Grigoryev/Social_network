@@ -1,29 +1,7 @@
 
-export const sendMessageAC = () => ({type: "SEND-MESSAGE"}) as const;
 
-export const updateNewMessageBodyAC = (body: string) => (
-    {
-        type: "UPDATE-NEW-MESSAGE-BODY",
-        body: body
-    }) as const;
 
-type ActionsTypes = ReturnType<typeof sendMessageAC> | ReturnType<typeof updateNewMessageBodyAC>
 
-type MessageType = {
-    message: string
-    id: number
-};
-
-type DialogsItemType = {
-    name: string
-    id: number
-};
-
-export type MessagesPageType = {
-    dialogs: DialogsItemType[]
-    messages: MessageType[]
-    newMessageBody: string
-};
 
 let  initialState: MessagesPageType = {
     dialogs: [
@@ -39,20 +17,16 @@ let  initialState: MessagesPageType = {
         {id: 3, message: "I'm fine"},
         {id: 4, message: "Yo"},
         {id: 5, message: "He-he-he"}
-    ],
-    newMessageBody: ""
+    ]
 }
 
 export const messagesReducer = (state = initialState, action: ActionsTypes): MessagesPageType => {
 
     switch (action.type) {
-        case "UPDATE-NEW-MESSAGE-BODY":
-            return {...state, newMessageBody: state.newMessageBody = action.body}
         case "SEND-MESSAGE":
-            let body = state.newMessageBody;
+            let body = action.newMessageBody;
             return {...state,
-                messages:  [...state.messages, {id: 6, message: body}],
-                newMessageBody: ''
+                messages:  [...state.messages, {id: 6, message: body}]
             }
         default:
             return state
@@ -60,3 +34,28 @@ export const messagesReducer = (state = initialState, action: ActionsTypes): Mes
 }
 
 export default messagesReducer;
+
+
+//Actions
+
+export const sendMessageAC = (newMessageBody: string) => ({type: "SEND-MESSAGE", newMessageBody}) as const;
+
+
+//Types
+
+type ActionsTypes = ReturnType<typeof sendMessageAC>
+
+type MessageType = {
+    message: string
+    id: number
+};
+
+type DialogsItemType = {
+    name: string
+    id: number
+};
+
+export type MessagesPageType = {
+    dialogs: DialogsItemType[]
+    messages: MessageType[]
+};

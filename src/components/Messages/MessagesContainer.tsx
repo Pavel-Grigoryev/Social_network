@@ -1,6 +1,6 @@
 import React, {ComponentType} from "react";
 
-import {MessagesPageType, sendMessageAC, updateNewMessageBodyAC} from "../../redux/messages-reducer";
+import {MessagesPageType, sendMessageAC} from "../../redux/messages-reducer";
 import {AppStateType} from "../../redux/redux-store";
 import Messages from "./Messages";
 import {connect} from "react-redux";
@@ -12,8 +12,7 @@ type MapStateToPropsType = {
 }
 
 type mapDispatchToPropsType = {
-    sendMessage: () => void
-    updateNewMessageBody: (body: string) => void
+    sendMessage: (newMessageBody: string) => void
 }
 
 export type MessagesPropsType = MapStateToPropsType & mapDispatchToPropsType;
@@ -26,11 +25,8 @@ const mapStateToProps = (state: AppStateType): MapStateToPropsType => {
 
 const mapDispatchToProps = (dispatch: Dispatch): mapDispatchToPropsType => {
     return {
-        sendMessage: () => {
-            dispatch(sendMessageAC())
-        },
-        updateNewMessageBody: (body: string) => {
-            dispatch(updateNewMessageBodyAC(body));
+        sendMessage: (newMessageBody: string) => {
+            dispatch(sendMessageAC(newMessageBody))
         }
     }
 }

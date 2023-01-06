@@ -8,8 +8,8 @@ import Settings from "./components/Settings/Settings";
 import {MessagesContainer} from "./components/Messages/MessagesContainer";
 import UsersContainer from "./components/Users/UsersContainer";
 import HeaderContainer from "./components/Header/HeaderContainer";
-import {Login} from "./components/Login/Login";
 import ProfileContainer from "./components/Profile/ProfileContainer";
+import {LoginContainer} from "./components/Login/LoginContainer";
 
 
 
@@ -25,7 +25,7 @@ const App = () => {
                 <Route path={'/News'} render={() => <News/>}/>
                 <Route path={'/Music'} render={() => <Music/>}/>
                 <Route path={'/Settings'} render={() => <Settings/>}/>
-                <Route path={'/login'} render={() => <Login/>}/>
+                <Route path={'/login'} render={() => <LoginContainer/>}/>
             </div>
         </div>
     );

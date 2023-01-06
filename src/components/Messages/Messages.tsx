@@ -1,10 +1,11 @@
-import React, {ChangeEvent} from "react";
+import React from "react";
 import s from './Messages.module.css'
 import MessageItem from "./MessagesItem/MessagesItem";
 import Message from "./Message/Message";
 import {MessagesPropsType} from "./MessagesContainer";
+import {AddMessageForm} from "./AddMessageForm/AddMessageForm";
 
-const Messages: React.FC<MessagesPropsType> = ({messagesPage, updateNewMessageBody, sendMessage}) => {
+const Messages: React.FC<MessagesPropsType> = ({messagesPage, sendMessage}) => {
 
     const MessageItemElement = messagesPage.dialogs.map(dialog => (
         <MessageItem key={dialog.id} name={dialog.name} id={dialog.id}/>));
@@ -12,12 +13,8 @@ const Messages: React.FC<MessagesPropsType> = ({messagesPage, updateNewMessageBo
     const messagesElement = messagesPage.messages.map(message => (<Message key={message.id}
                                                                            message={message.message}/>));
 
-    const onNewMessageChangeHandler = (e: ChangeEvent<HTMLTextAreaElement>) => {
-        updateNewMessageBody(e.currentTarget.value);
-    }
-
-    const onSendMessageClickHandler = () => {
-        sendMessage();
+    const addNewMessage = (newMessageBody: string) => {
+        sendMessage(newMessageBody)
     }
 
     return (
@@ -29,14 +26,11 @@ const Messages: React.FC<MessagesPropsType> = ({messagesPage, updateNewMessageBo
                 {messagesElement}
             </div>
             <div className={s.addMessageBlock}>
-                <textarea placeholder={'Enter your message'}
-                          value={messagesPage.newMessageBody}
-                          onChange={onNewMessageChangeHandler}
-                ></textarea>
-                <button onClick={onSendMessageClickHandler}>Add message</button>
+                <AddMessageForm addNewMessage={addNewMessage}/>
             </div>
         </div>
     );
 }
 
 export default Messages;
+

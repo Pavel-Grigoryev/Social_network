@@ -1,0 +1,12 @@
+
+.form {
+    display: flex;
+    flex-direction: column;
+    width: 200px;
+}
+
+.error {
+    margin: 7px 0;
+    font-size: 14px;
+    color: var(--palette-second);
+}
