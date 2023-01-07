@@ -64,7 +64,7 @@ export const authUserAPI = {
     login(dataForm: LoginFormDataType) {
         return instance.post<CommonResponseType<AuthUserLoginResponseDataType>>(`auth/login`, dataForm);
     },
-    logout(dataForm: LoginFormDataType) {
+    logout() {
         return instance.delete<CommonResponseType>(`auth/login`);
     }
 }

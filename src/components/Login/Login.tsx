@@ -1,20 +1,16 @@
 import React from 'react';
 import {LoginForm} from "./LoginForm/LoginForm";
+import {LoginPropsType} from "./LoginContainer";
+import {Redirect} from "react-router-dom";
 
 
-export type LoginFormDataType = {
-    email: string
-    password: string
-    rememberMe: boolean
-}
-
-type LoginPropsType = {
-    loginAuthUser: (dataForm: LoginFormDataType) => void
-}
-
-export const Login = (props:LoginPropsType) => {
+export const Login: React.FC<LoginPropsType>= (props) => {
     const onSubmitHandler = (dataForm: LoginFormDataType) => {
         props.loginAuthUser(dataForm);
+    }
+
+    if (props.isAuth) {
+        return <Redirect to={"/Profile"}/>
     }
 
     return (
@@ -25,3 +21,11 @@ export const Login = (props:LoginPropsType) => {
     );
 };
 
+//Types
+
+
+export type LoginFormDataType = {
+    email: string
+    password: string
+    rememberMe: boolean
+}
