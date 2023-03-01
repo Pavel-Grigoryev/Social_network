@@ -84,7 +84,7 @@ type usersResponseType = {
 }
 
 type AuthUserResponseDataType = {
-    userId: number
+    id: number
     email: string
     login: string
 }

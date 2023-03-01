@@ -34,8 +34,8 @@ export const getAuthMe = (): AppThunk => {
     return (dispatch) => {
         authUserAPI.me().then((data) => {
             if (data) {
-                let {userId, email, login} = data;
-                dispatch(setAuthUserData(userId, email, login, true));
+                let {id, email, login} = data;
+                dispatch(setAuthUserData(id, email, login, true));
             }
         });
 
