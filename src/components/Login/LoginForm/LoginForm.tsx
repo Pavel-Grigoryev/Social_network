@@ -5,10 +5,10 @@ import {schema} from "../../../utils/validators/validators";
 import s from './LoginForm.module.css'
 
 
-export const LoginForm = ({onSubmitLogin}:LoginFormPropsType) => {
+export const LoginForm = ({onSubmitLogin}: LoginFormPropsType) => {
 
 
-    const {register, handleSubmit, reset, formState: { errors } } = useForm<LoginFormInputs>({
+    const {register, handleSubmit, setError, clearErrors, formState: {errors}} = useForm<LoginFormInputs>({
         defaultValues: {
             email: '',
             password: '',
@@ -17,9 +17,23 @@ export const LoginForm = ({onSubmitLogin}:LoginFormPropsType) => {
         resolver: yupResolver(schema),
     });
 
-    const onSubmit: SubmitHandler<LoginFormInputs> = (data) => {
-        onSubmitLogin(data);
-        reset();
+    const onSubmit: SubmitHandler<LoginFormInputs> = async (data) => {
+        try {
+            const res = await onSubmitLogin(data);
+            setError('serverError', {
+                type: "500",
+                message: res
+            })
+        } catch (e) {
+            setError('serverError', {
+                type: "500",
+                message: e as string | undefined
+            })
+        } finally {
+            setTimeout(() => {
+               clearErrors("serverError");
+            }, 7000)
+        }
     }
 
     return (
@@ -36,6 +50,7 @@ export const LoginForm = ({onSubmitLogin}:LoginFormPropsType) => {
                 <input type={'checkbox'} {...register("rememberMe")}/>
                 Remember me
             </label>
+            {errors.serverError?.type === "500" && <p>{errors.serverError.message}</p>}
             <button type={'submit'}>Login</button>
         </form>
     )
@@ -47,9 +62,10 @@ export const LoginForm = ({onSubmitLogin}:LoginFormPropsType) => {
 export type LoginFormInputs = {
     email: string
     password: string
-    rememberMe: false
+    rememberMe: false,
+    serverError: string
 }
 
 type LoginFormPropsType = {
-    onSubmitLogin: (data: LoginFormInputs) => void
+    onSubmitLogin: (data: LoginFormInputs) => Promise<string>
 }

@@ -14,7 +14,6 @@ class ProfileContainer extends React.Component<ProfileContainerPropsType> {
 
         let userId: number | null = +this.props.match.params.userId;
         if (!userId) {
-            debugger
             userId = this.props.autorizedUserId;
         }
         this.props.getUserProfile(userId);

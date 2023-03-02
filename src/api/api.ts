@@ -71,7 +71,7 @@ export const authUserAPI = {
 
 //Types
 
-type CommonResponseType<T = {}> = {
+export type CommonResponseType<T = {}> = {
     resultCode: number
     messages: Array<string>
     data: T

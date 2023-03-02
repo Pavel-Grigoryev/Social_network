@@ -22,7 +22,7 @@ type MapStateToPropsType = {
 }
 
 type mapDispatchToPropsType = {
-    loginAuthUser: (dataForm: LoginFormDataType) => void
+    loginAuthUser: (dataForm: LoginFormDataType) => Promise<string>
 }
 
 export type LoginPropsType = MapStateToPropsType & mapDispatchToPropsType;

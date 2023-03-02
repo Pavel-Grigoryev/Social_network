@@ -1,6 +1,8 @@
 import {authUserAPI} from "../api/api";
 import {LoginFormDataType} from "../components/Login/Login";
 import {AppThunk} from "./redux-store";
+import {handleServerAppError, handleServerNetworkError} from "../utils/error-utils";
+import {AxiosError} from "axios";
 
 let initialState: InitialStateType = {
     userId: null,
@@ -26,7 +28,10 @@ export default authReducer;
 
 //Actions
 
-export const setAuthUserData = (userId: number | null, email: string | null , login: string | null, isAuth: boolean) => ({type: "SET_USER_DATA", payload:{userId, email, login, isAuth}}) as const;
+export const setAuthUserData = (userId: number | null, email: string | null, login: string | null, isAuth: boolean) => ({
+    type: "SET_USER_DATA",
+    payload: {userId, email, login, isAuth}
+}) as const;
 
 //Thunks
 
@@ -42,18 +47,26 @@ export const getAuthMe = (): AppThunk => {
     }
 }
 
-export const loginAuthUser = (dataForm: LoginFormDataType): AppThunk  => {
-    return (dispatch) => {
-        authUserAPI.login(dataForm).then((res) => {
+export const loginAuthUser = (dataForm: LoginFormDataType): AppThunk => {
+    return async (dispatch) => {
+
+        try {
+            const res = await authUserAPI.login(dataForm)
             if (res.data.resultCode === 0) {
                 dispatch(getAuthMe());
+                return res.data.messages[0]
+            } else {
+                return handleServerAppError(res.data);
             }
-        });
-
+        } catch (e) {
+            const err = e as Error | AxiosError;
+            return handleServerNetworkError(err);
+        }
     }
 }
 
-export const logoutAuthUser = (): AppThunk  => {
+
+export const logoutAuthUser = (): AppThunk => {
     return (dispatch) => {
         authUserAPI.logout().then((res) => {
             if (res.data.resultCode === 0) {
