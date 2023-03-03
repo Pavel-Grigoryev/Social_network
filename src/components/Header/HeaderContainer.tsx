@@ -7,15 +7,9 @@ import {getAuthMe, logoutAuthUser} from "../../redux/auth-reducer";
 
 
 class HeaderContainer extends React.Component<HeaderContainerPropsType> {
-
-    componentDidMount() {
-        this.props.getAuthMe();
-    }
-
     render() {
         return <Header {...this.props}/>
     }
-
 }
 
 const mapStateToProps = (state: AppStateType): MapStateToPropsType => ({
@@ -30,7 +24,6 @@ export default connect(mapStateToProps, {getAuthMe, logoutAuthUser})(HeaderConta
 type MapStateToPropsType = {
     isAuth: boolean
     login: string | null
-
 }
 
 type mapDispatchToPropsType = {

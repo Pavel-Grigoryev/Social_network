@@ -5,9 +5,8 @@ import {Redirect} from "react-router-dom";
 
 
 export const Login: React.FC<LoginPropsType>= (props) => {
-    const onSubmitHandler = (dataForm: LoginFormDataType) => {
-      return props.loginAuthUser(dataForm);
-
+    const onSubmitHandler = async (dataForm: LoginFormDataType) => {
+        return props.loginAuthUser(dataForm);
     }
 
     if (props.isAuth) {

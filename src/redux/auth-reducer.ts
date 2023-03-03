@@ -37,13 +37,13 @@ export const setAuthUserData = (userId: number | null, email: string | null, log
 
 export const getAuthMe = (): AppThunk => {
     return (dispatch) => {
-        authUserAPI.me().then((data) => {
-            if (data) {
-                let {id, email, login} = data;
-                dispatch(setAuthUserData(id, email, login, true));
-            }
-        });
-
+       return  authUserAPI.me()
+            .then((data) => {
+                if (data) {
+                    let {id, email, login} = data;
+                    dispatch(setAuthUserData(id, email, login, true));
+                }
+            });
     }
 }
 
