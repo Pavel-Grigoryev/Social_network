@@ -1,11 +1,11 @@
-import React from "react";
+import React, {memo} from "react";
 import s from './MyPosts.module.css'
 import Post from "./Post/Post";
 import {ProfileMyPostsType} from "./MyPostsContainer";
 import {MyPostsForm, MyPostsFormInput} from "./MyPostsForm/MyPostsForm";
 
 
-const MyPosts: React.FC<ProfileMyPostsType> = ({posts, addPost}) => {
+const MyPosts: React.FC<ProfileMyPostsType> = memo(({posts, addPost}) => {
 
     const postsElement = posts.map(post => (<Post key={post.id} message={post.message} likeCount={post.likeCount}/>))
 
@@ -24,7 +24,7 @@ const MyPosts: React.FC<ProfileMyPostsType> = ({posts, addPost}) => {
             </div>
         </div>
     );
-}
+})
 
 export default MyPosts;
 
