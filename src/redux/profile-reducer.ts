@@ -13,7 +13,7 @@ let initialState = {
 
 export const profileReducer = (state = initialState, action: ActionsTypesProfile): InitialStateType => {
     switch (action.type) {
-        case 'ADD-POST': {
+        case 'PROFILE/ADD-POST': {
             let newPost: PostType = {
                 id: 4,
                 message: action.newPost,
@@ -21,12 +21,15 @@ export const profileReducer = (state = initialState, action: ActionsTypesProfile
             };
             return {...state, posts: [...state.posts, newPost]};
         }
-        case "SET-USER-PROFILE": {
+        case "PROFILE/DELETE-POST": {
+            return {...state, posts: state.posts.filter(p => p.id !== action.id)};
+        }
+        case "PROFILE/SET-USER-PROFILE": {
             return {...state, profile: action.profile};
         }
-        case "SET-USER-STATUS":
+        case "PROFILE/SET-USER-STATUS":
             return {...state, status: action.status}
-        case "CHANGE-USER-STATUS":
+        case "PROFILE/CHANGE-USER-STATUS":
             return {...state, status: action.status}
         default:
             return state;
@@ -37,55 +40,48 @@ export default profileReducer;
 
 //Action
 
-export const addPostAC = (newPost: string) => ({type: "ADD-POST", newPost}) as const;
+export const addPostAC = (newPost: string) => ({type: "PROFILE/ADD-POST", newPost}) as const;
+export const deletePostAC = (id: number) => ({type: "PROFILE/DELETE-POST", id}) as const;
 
 
 export const setUserProfileAC = (profile: ProfileType) => (
     {
-        type: "SET-USER-PROFILE",
+        type: "PROFILE/SET-USER-PROFILE",
         profile
     }) as const;
 
 export const setUserStatusAC = (status: string) => (
     {
-        type: "SET-USER-STATUS",
+        type: "PROFILE/SET-USER-STATUS",
         status
     }) as const;
 
 export const changeUserStatusAC = (status: string) => (
     {
-        type: "CHANGE-USER-STATUS",
+        type: "PROFILE/CHANGE-USER-STATUS",
         status
     }) as const;
 
 
 //Thunks
 
-export const getUserStatus = (userId: number) => {
-    return (dispatch: Dispatch<ActionsTypesProfile>) => {
-        profileAPI.getStatus(userId).then((res) => {
-            dispatch(setUserStatusAC(res.data));
-        });
+export const getUserStatus = (userId: number) => async (dispatch: Dispatch<ActionsTypesProfile>) => {
+    const res = await profileAPI.getStatus(userId);
+    dispatch(setUserStatusAC(res.data));
+}
+
+export const changeUserStatus = (status: string) => async (dispatch: Dispatch<ActionsTypesProfile>) => {
+    const res = await profileAPI.changeStatus(status)
+    if (res.data.resultCode === 0) {
+        dispatch(changeUserStatusAC(status));
     }
 }
 
-export const changeUserStatus = (status: string) => {
-    return (dispatch: Dispatch<ActionsTypesProfile>) => {
-        profileAPI.changeStatus(status).then((res) => {
-            if (res.data.resultCode === 0) {
-                dispatch(changeUserStatusAC(status));
-            }
-        });
+export const getUserProfile = (userId: number) => async (dispatch: Dispatch<ActionsTypesProfile>) => {
+       const res = await profileAPI.getProfile(userId)
+            dispatch(setUserProfileAC(res));
     }
-}
 
-export const getUserProfile = (userId: number) => {
-    return (dispatch: Dispatch<ActionsTypesProfile>) => {
-        profileAPI.getProfile(userId).then((data) => {
-            dispatch(setUserProfileAC(data));
-        });
-    }
-}
 
 //Types
 
@@ -113,7 +109,12 @@ export type ProfileType = {
 
 export type InitialStateType = typeof initialState;
 
-type ActionsTypesProfile = ReturnType<typeof addPostAC> | ReturnType<typeof setUserProfileAC> | ReturnType<typeof setUserStatusAC> | ReturnType<typeof changeUserStatusAC>
+type ActionsTypesProfile =
+    ReturnType<typeof addPostAC>
+    | ReturnType<typeof setUserProfileAC>
+    | ReturnType<typeof setUserStatusAC>
+    | ReturnType<typeof changeUserStatusAC>
+    | ReturnType<typeof deletePostAC>;
 
 
 export type PostType = {

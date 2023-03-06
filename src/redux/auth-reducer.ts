@@ -13,7 +13,7 @@ let initialState: InitialStateType = {
 
 const authReducer = (state = initialState, action: ActionsTypesAuth): InitialStateType => {
     switch (action.type) {
-        case "SET_USER_DATA":
+        case "AUTH/SET_USER_DATA":
             return {
                 ...state,
                 ...action.payload
@@ -29,27 +29,25 @@ export default authReducer;
 //Actions
 
 export const setAuthUserData = (userId: number | null, email: string | null, login: string | null, isAuth: boolean) => ({
-    type: "SET_USER_DATA",
+    type: "AUTH/SET_USER_DATA",
     payload: {userId, email, login, isAuth}
 }) as const;
 
 //Thunks
 
 export const getAuthMe = (): AppThunk => {
-    return (dispatch) => {
-       return  authUserAPI.me()
-            .then((data) => {
-                if (data) {
-                    let {id, email, login} = data;
+    return async (dispatch) => {
+       const res = await authUserAPI.me();
+                if (res.data.resultCode === 0) {
+                    let {id, email, login} = res.data.data;
                     dispatch(setAuthUserData(id, email, login, true));
                 }
-            });
+
     }
 }
 
 export const loginAuthUser = (dataForm: LoginFormDataType): AppThunk => {
     return async (dispatch) => {
-
         try {
             const res = await authUserAPI.login(dataForm)
             if (res.data.resultCode === 0) {
@@ -67,13 +65,11 @@ export const loginAuthUser = (dataForm: LoginFormDataType): AppThunk => {
 
 
 export const logoutAuthUser = (): AppThunk => {
-    return (dispatch) => {
-        authUserAPI.logout().then((res) => {
+    return async (dispatch) => {
+       const res = await authUserAPI.logout();
             if (res.data.resultCode === 0) {
                 dispatch(setAuthUserData(null, null, null, false));
             }
-        });
-
     }
 }
 

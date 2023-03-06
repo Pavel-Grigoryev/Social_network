@@ -20,19 +20,11 @@ export const usersAPI = {
     },
 
     followUser (userId: number) {
-        return instance.post<CommonResponseType>(`follow/${userId}`).then((response) => {
-            if (response.data.resultCode == 0) {
-              return response.data.data
-            }
-        });
+        return instance.post<CommonResponseType>(`follow/${userId}`);
     },
 
     unfollowUser (userId: number) {
-        return instance.delete<CommonResponseType>(`follow/${userId}`).then((response) => {
-            if (response.data.resultCode == 0) {
-                return response.data.data
-            }
-        });
+        return instance.delete<CommonResponseType>(`follow/${userId}`);
     }
 }
 
@@ -55,11 +47,7 @@ export const profileAPI = {
 export const authUserAPI = {
     me() {
         return instance.get<CommonResponseType<AuthUserResponseDataType>>(`auth/me`
-        ).then((response) => {
-            if (response.data.resultCode === 0) {
-                return response.data.data;
-            }
-        });
+        )
     },
     login(dataForm: LoginFormDataType) {
         return instance.post<CommonResponseType<AuthUserLoginResponseDataType>>(`auth/login`, dataForm);
