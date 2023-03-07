@@ -1,6 +1,17 @@
 import {usersAPI} from "../api/api";
 import {Dispatch} from "redux";
 
+let initialState = {
+    users: [] as UserType[],
+    pageSize: 10,
+    totalUsersCount: 0,
+    currentPage: 1,
+    isFetching: false,
+    followingInProgress: [] as Array<number>
+}
+
+export type InitialStateType = typeof initialState;
+
 export const userReducer = (state = initialState, action: ActionsTypesUsers): InitialStateType => {
     switch (action.type) {
         case "USERS/FOLLOW":
@@ -99,13 +110,3 @@ export type UserType = {
     location: LocationType
 };
 
-let initialState = {
-    users: [] as UserType[],
-    pageSize: 5,
-    totalUsersCount: 0,
-    currentPage: 1,
-    isFetching: false,
-    followingInProgress: [] as Array<number>
-}
-
-export type InitialStateType = typeof initialState;
