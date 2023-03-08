@@ -5,10 +5,8 @@ import {Route, withRouter} from "react-router-dom";
 import Music from "./components/Music/Music";
 import News from "./components/News/News";
 import Settings from "./components/Settings/Settings";
-import {MessagesContainer} from "./components/Messages/MessagesContainer";
 import UsersContainer from "./components/Users/UsersContainer";
 import HeaderContainer from "./components/Header/HeaderContainer";
-import ProfileContainer from "./components/Profile/ProfileContainer";
 import {LoginContainer} from "./components/Login/LoginContainer";
 import {connect} from "react-redux";
 import {compose} from "redux";
@@ -16,11 +14,18 @@ import {initializeApp} from "./redux/app-reducer";
 import {AppStateType} from "./redux/redux-store";
 import {Preloader} from "./components/common/Preloader/Preloader";
 import s from "./App.module.css"
+import {withSuspense} from "./HOC/withSuspense";
+
+const MessagesContainer = React.lazy(() =>
+    import('./components/Messages/MessagesContainer'));
+const ProfileContainer = React.lazy(() =>
+    import('./components/Profile/ProfileContainer'));
+
 
 class App extends React.Component<AppPropsType> {
 
     componentDidMount() {
-       this.props.initializeApp();
+        this.props.initializeApp();
     }
 
     render() {
@@ -36,8 +41,8 @@ class App extends React.Component<AppPropsType> {
                 <HeaderContainer/>
                 <Navbar/>
                 <div className={s.appWrapperContent}>
-                    <Route path={'/Messages'} render={() => <MessagesContainer/>}/>
-                    <Route path={'/Profile/:userId?'} render={() => <ProfileContainer/>}/>
+                    <Route path={'/Messages'} render={withSuspense(MessagesContainer)}/>
+                    <Route path={'/Profile/:userId?'} render={withSuspense(ProfileContainer)}/>
                     <Route path={'/users'} render={() => <UsersContainer/>}/>
                     <Route path={'/News'} render={() => <News/>}/>
                     <Route path={'/Music'} render={() => <Music/>}/>
