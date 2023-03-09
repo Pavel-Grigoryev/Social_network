@@ -1,7 +1,7 @@
 import profileReducer, {
     addPostAC, deletePostAC,
     InitialStateType,
-    PostType, ProfileType
+    PostType, ProfileDataStatusType, ProfileType
 } from "./profile-reducer";
 
 let startState: InitialStateType;
@@ -14,9 +14,9 @@ beforeEach(() => {
             {id: 3, message: "The weather is good.", likeCount: 30}
         ] as PostType[],
         profile: {} as ProfileType,
-        status: ''
+        status: '',
+        profileDataStatus: 'idle' as ProfileDataStatusType
     }
-
 })
 
 test('new post text should be added in messages array', () => {

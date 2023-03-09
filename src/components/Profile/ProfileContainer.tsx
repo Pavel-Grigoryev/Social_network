@@ -2,9 +2,17 @@ import React from "react";
 import Profile from "./Profile";
 import {connect} from "react-redux";
 import {AppStateType} from "../../redux/redux-store";
-import {getUserProfile, ProfileType, getUserStatus, changeUserStatus, savePhoto} from "../../redux/profile-reducer";
+import {
+    getUserProfile,
+    ProfileType,
+    getUserStatus,
+    changeUserStatus,
+    savePhoto,
+    ProfileDataStatusType, setProfileDataStatusAC, updateUserProfile
+} from "../../redux/profile-reducer";
 import {RouteComponentProps, withRouter} from "react-router-dom";
 import {compose} from "redux";
+import {ProfilePayloadType} from "./ProfileInfo/ProfileDataForm/ProfileDataForm";
 
 
 class ProfileContainer extends React.Component<ProfileContainerPropsType> {
@@ -34,9 +42,14 @@ class ProfileContainer extends React.Component<ProfileContainerPropsType> {
 
         return (
             <div>
-                <Profile  {...this.props} profile={this.props.profile} status={this.props.status}
-                          changeUserStatus={this.props.changeUserStatus} isOwner={!this.props.match.params.userId}
+                <Profile  {...this.props} profile={this.props.profile}
+                          status={this.props.status}
+                          changeUserStatus={this.props.changeUserStatus}
+                          isOwner={!this.props.match.params.userId}
                           savePhoto={this.props.savePhoto}
+                          profileDataStatus={this.props.profileDataStatus}
+                          setProfileDataStatus={this.props.setProfileDataStatusAC}
+                          onSubmitProfileDate={this.props.updateUserProfile}
                 />
             </div>
         );
@@ -53,6 +66,7 @@ type MapStateToPropsType = {
     status: string
     autorizedUserId: number | null
     isAuth: boolean
+    profileDataStatus: ProfileDataStatusType
 }
 
 type mapDispatchToPropsType = {
@@ -60,6 +74,8 @@ type mapDispatchToPropsType = {
     getUserStatus: (userId: number | null) => void
     changeUserStatus: (status: string) => void
     savePhoto: (file: any) => void
+    setProfileDataStatusAC: (dataStatus: ProfileDataStatusType) => void
+    updateUserProfile: (data: ProfilePayloadType) => void
 }
 
 
@@ -73,11 +89,19 @@ const mapStateToProps = (state: AppStateType): MapStateToPropsType => {
         profile: state.profilePage.profile,
         status: state.profilePage.status,
         autorizedUserId: state.auth.userId,
-        isAuth: state.auth.isAuth
+        isAuth: state.auth.isAuth,
+        profileDataStatus: state.profilePage.profileDataStatus
     }
 }
 
-export default compose<React.ComponentType>(connect(mapStateToProps, {getUserProfile, getUserStatus, changeUserStatus, savePhoto}),
+export default compose<React.ComponentType>(connect(mapStateToProps, {
+        getUserProfile,
+        getUserStatus,
+        changeUserStatus,
+        savePhoto,
+        setProfileDataStatusAC,
+        updateUserProfile
+    }),
     withRouter)(ProfileContainer)
 
 

@@ -1,7 +1,8 @@
 import React from "react";
 import ProfileInfo from "./ProfileInfo/ProfileInfo";
 import {MyPostsContainer} from "./MyPosts/MyPostsContainer";
-import {ProfileType} from "../../redux/profile-reducer";
+import {ProfileDataStatusType, ProfileType} from "../../redux/profile-reducer";
+import {ProfilePayloadType} from "./ProfileInfo/ProfileDataForm/ProfileDataForm";
 
 type ProfilePropsType = {
     profile: ProfileType | null
@@ -9,9 +10,12 @@ type ProfilePropsType = {
     changeUserStatus: (status: string) => void
     isOwner: boolean
     savePhoto: (file: any) => void
+    profileDataStatus: ProfileDataStatusType
+    setProfileDataStatus: (dataStatus: ProfileDataStatusType) => void
+    onSubmitProfileDate: (data: ProfilePayloadType) => void
 }
 
-const Profile = ({profile, status, changeUserStatus, isOwner, savePhoto}: ProfilePropsType) => {
+const Profile = ({profile, status, changeUserStatus, isOwner, savePhoto, profileDataStatus, onSubmitProfileDate, setProfileDataStatus}: ProfilePropsType) => {
     return (
         <main>
             <ProfileInfo profile={profile}
@@ -19,6 +23,9 @@ const Profile = ({profile, status, changeUserStatus, isOwner, savePhoto}: Profil
                          changeUserStatus={changeUserStatus}
                          isOwner={isOwner}
                          savePhoto={savePhoto}
+                         profileDataStatus={profileDataStatus}
+                         setProfileDataStatus={setProfileDataStatus}
+                         onSubmitProfileDate={onSubmitProfileDate}
             />
             <MyPostsContainer/>
         </main>

@@ -2,6 +2,7 @@ import axios from "axios";
 import {UserType} from "../redux/users-reducer";
 import {PhotosType, ProfileType} from "../redux/profile-reducer";
 import {LoginFormDataType} from "../components/Login/Login";
+import {ProfilePayloadType} from "../components/Profile/ProfileInfo/ProfileDataForm/ProfileDataForm";
 
 const instance = axios.create({
     withCredentials: true,
@@ -41,6 +42,10 @@ export const profileAPI = {
 
     changeStatus(status: string) {
         return instance.put<CommonResponseType>(`profile/status`, {status})
+    },
+
+    updateProfile(date: ProfilePayloadType) {
+        return instance.put<CommonResponseType>(`profile`, date)
     },
 
     savePhoto(file: any) {
