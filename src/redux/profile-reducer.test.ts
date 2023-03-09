@@ -1,7 +1,7 @@
 import profileReducer, {
     addPostAC, deletePostAC,
     InitialStateType,
-    PostType
+    PostType, ProfileType
 } from "./profile-reducer";
 
 let startState: InitialStateType;
@@ -13,7 +13,7 @@ beforeEach(() => {
             {id: 2, message: "It's my first post", likeCount: 20},
             {id: 3, message: "The weather is good.", likeCount: 30}
         ] as PostType[],
-        profile: null,
+        profile: {} as ProfileType,
         status: ''
     }
 

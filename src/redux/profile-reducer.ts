@@ -7,7 +7,7 @@ let initialState = {
         {id: 2, message: "It's my first post", likeCount: 20},
         {id: 3, message: "The weather is good.", likeCount: 30}
     ] as PostType[],
-    profile: null as ProfileType | null,
+    profile:null as ProfileType | null,
     status: ''
 }
 
@@ -31,6 +31,9 @@ export const profileReducer = (state = initialState, action: ActionsTypesProfile
             return {...state, status: action.status}
         case "PROFILE/CHANGE-USER-STATUS":
             return {...state, status: action.status}
+        case "PROFILE/SAVE-PHOTOS-SUCCESS":
+            debugger
+            return {...state, profile: {...state.profile, photos: action.photos } as ProfileType | null}
         default:
             return state;
     }
@@ -42,6 +45,8 @@ export default profileReducer;
 
 export const addPostAC = (newPost: string) => ({type: "PROFILE/ADD-POST", newPost}) as const;
 export const deletePostAC = (id: number) => ({type: "PROFILE/DELETE-POST", id}) as const;
+
+export const savePhotoSuccessAC = (photos: PhotosType) => ({type: "PROFILE/SAVE-PHOTOS-SUCCESS", photos}) as const;
 
 
 export const setUserProfileAC = (profile: ProfileType) => (
@@ -82,6 +87,13 @@ export const getUserProfile = (userId: number) => async (dispatch: Dispatch<Acti
             dispatch(setUserProfileAC(res));
     }
 
+export const savePhoto = (file: any) => async (dispatch: Dispatch<ActionsTypesProfile>) => {
+    debugger
+    const res = await profileAPI.savePhoto(file)
+    dispatch(savePhotoSuccessAC(res.data.data.photos));
+
+}
+
 
 //Types
 
@@ -101,10 +113,12 @@ export type ProfileType = {
         youtube: string
         mainLink: string
     }
-    photos: {
-        small: string
-        large: string
-    }
+    photos: PhotosType
+}
+
+export type PhotosType = {
+    small: string
+    large: string
 }
 
 export type InitialStateType = typeof initialState;
@@ -114,7 +128,9 @@ type ActionsTypesProfile =
     | ReturnType<typeof setUserProfileAC>
     | ReturnType<typeof setUserStatusAC>
     | ReturnType<typeof changeUserStatusAC>
-    | ReturnType<typeof deletePostAC>;
+    | ReturnType<typeof deletePostAC>
+    | ReturnType<typeof savePhotoSuccessAC>
+    ;
 
 
 export type PostType = {

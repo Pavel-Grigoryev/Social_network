@@ -1,6 +1,6 @@
 import axios from "axios";
 import {UserType} from "../redux/users-reducer";
-import {ProfileType} from "../redux/profile-reducer";
+import {PhotosType, ProfileType} from "../redux/profile-reducer";
 import {LoginFormDataType} from "../components/Login/Login";
 
 const instance = axios.create({
@@ -41,6 +41,16 @@ export const profileAPI = {
 
     changeStatus(status: string) {
         return instance.put<CommonResponseType>(`profile/status`, {status})
+    },
+
+    savePhoto(file: any) {
+        let formData = new FormData();
+        formData.append("image", file)
+        return instance.put<CommonResponseType<PhotosResponseDataType>>(`profile/photo`, formData, {
+            headers: {
+                'Content-Type' : 'multipart/form-data'
+            }
+        });
     }
 }
 
@@ -79,4 +89,8 @@ type AuthUserResponseDataType = {
 
 type AuthUserLoginResponseDataType = {
     userId: number
+}
+
+type PhotosResponseDataType = {
+    photos: PhotosType
 }
