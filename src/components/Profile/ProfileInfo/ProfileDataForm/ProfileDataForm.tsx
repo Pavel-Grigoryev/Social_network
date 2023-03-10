@@ -5,6 +5,7 @@ import {yupResolver} from "@hookform/resolvers/yup/dist/yup";
 import {schemaProfile} from "../../../../utils/validators/validators";
 import s from "../../../Login/LoginForm/LoginForm.module.css";
 
+
 type ProfileDataFormType = {
     profile: ProfileType
     onSubmitProfileDate: (data: ProfilePayloadType) => void
@@ -15,16 +16,37 @@ export const ProfileDataForm = ({
                                     onSubmitProfileDate
                                 }: ProfileDataFormType) => {
     const {photos, ...defaultFormValues} = profile
-    const {register, handleSubmit, setError, clearErrors, formState: {errors}} = useForm<ProfilePayloadType>({
+    const {register, handleSubmit, setError, formState: {errors}} = useForm<ProfilePayloadType>({
         defaultValues: {
             ...defaultFormValues
         },
         resolver: yupResolver(schemaProfile),
     });
 
-    const onSubmit: SubmitHandler<ProfilePayloadType> = (data) => {
-        debugger
-        const res = onSubmitProfileDate(data);
+    const onSubmit: SubmitHandler<ProfilePayloadType> = async (data) => {
+        try {
+            const res = await onSubmitProfileDate(data);
+            debugger
+        } catch (err) {
+            debugger
+            const errors = err as string[] | string
+            if (typeof errors !== "string") {
+                errors.map(e => {
+                    debugger
+                    const fieldName = e.substring(e.indexOf('>') + 1, e.indexOf(')')).toLowerCase()
+                    setError(`contacts.${fieldName as keyof ContactType}`, {
+                        type: "serverError",
+                        message: e.substring(0, e.indexOf('('))
+                    })
+                })
+            } else {
+                debugger
+                setError("networkError", {
+                    type: "networkError",
+                    message: errors
+                })
+            }
+        }
     }
 
     return (
@@ -45,15 +67,22 @@ export const ProfileDataForm = ({
                 <b>About me</b>: <textarea placeholder={"About me"} {...register("aboutMe")} />
                 {errors.aboutMe && <div className={s.error}>{errors.aboutMe.message}</div>}
             </div>
+
             <div>
                 <b>Contacts</b>: {Object.keys(profile.contacts).map(key => {
                 return <div key={key}>
                     <b>{key}</b>: <input placeholder={key} {...register(`contacts.${key as keyof ContactType}`)} />
+
+                    {
+                        errors.contacts?.[key as keyof ContactType] &&
+                        <div className={s.error}>{errors.contacts[key as keyof ContactType]?.message}</div>
+                    }
                 </div>
             })}
             </div>
+            {errors.networkError && <div className={s.error}>{errors.networkError.message}</div>}
         </form>
     )
 }
 
-export type ProfilePayloadType = Omit<ProfileType, 'photos'>
+export type ProfilePayloadType = Omit<ProfileType, 'photos'> & { networkError: string }

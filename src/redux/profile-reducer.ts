@@ -107,13 +107,16 @@ export const updateUserProfile = (data: ProfilePayloadType): AppThunk => async (
                 dispatch(setProfileDataStatusAC("succeeded"));
                 dispatch(getUserProfile(userId));
             } else {
+                debugger
                 dispatch(setProfileDataStatusAC("failed"));
-                return handleServerAppError(res.data);
+                return Promise.reject(handleServerAppError(res.data));
             }
         }
     } catch (e) {
+        debugger
+        dispatch(setProfileDataStatusAC("failed"));
         const err = e as Error | AxiosError;
-        return handleServerNetworkError(err);
+        return  Promise.reject(handleServerNetworkError(err));
     }
 }
 

@@ -45,13 +45,12 @@ const ProfileInfo = ({
                 <img src={profile.photos.large || userPhoto} alt="Profile" className={s.profileImg}/>
                 {isOwner && <input type="file" onChange={onProfilePhotoSelected}/>}
                 {profileDataStatus === "idle" || profileDataStatus === "succeeded" ?
-                    <ProfileData profile={profile} changeUserStatus={changeUserStatus} status={status}
-                                 profileDataStatus={profileDataStatus} setProfileDataStatus={setProfileDataStatus}
+                    <ProfileData profile={profile}
+                                setProfileDataStatus={setProfileDataStatus}
                                  isOwner={isOwner}
                     /> :
                     <ProfileDataForm profile={profile}
-                                     status={status} changeUserStatus={changeUserStatus}
-                                     profileDataStatus={profileDataStatus} onSubmitProfileDate={onSubmitProfileDate}
+                                     onSubmitProfileDate={onSubmitProfileDate}
                     />
                 }
                 <div>

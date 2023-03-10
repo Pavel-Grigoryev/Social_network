@@ -4,7 +4,7 @@ import {AxiosError} from "axios";
 
 export const handleServerAppError = <T>(data: CommonResponseType<T>) => {
    if (data.messages.length !==0) {
-        return data.messages[0];
+        return data.messages;
     } else {
         return "Some error occurred";
     }
