@@ -72,6 +72,14 @@ export const authUserAPI = {
     }
 }
 
+export const securityUserAPI = {
+   getCaptcha() {
+       return instance.get<CaptchaResponseType>(`security/get-captcha-url`)
+   }
+}
+
+
+
 //Types
 
 export type CommonResponseType<T = {}> = {
@@ -98,4 +106,8 @@ type AuthUserLoginResponseDataType = {
 
 type PhotosResponseDataType = {
     photos: PhotosType
+}
+
+type CaptchaResponseType = {
+    url: string
 }

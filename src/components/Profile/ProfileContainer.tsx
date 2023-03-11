@@ -13,6 +13,7 @@ import {
 import {RouteComponentProps, withRouter} from "react-router-dom";
 import {compose} from "redux";
 import {ProfilePayloadType} from "./ProfileInfo/ProfileDataForm/ProfileDataForm";
+import {withAuthRedirect} from "../../HOC/withAuthRedirect";
 
 
 class ProfileContainer extends React.Component<ProfileContainerPropsType> {
@@ -102,6 +103,6 @@ export default compose<React.ComponentType>(connect(mapStateToProps, {
         setProfileDataStatusAC,
         updateUserProfile
     }),
-    withRouter)(ProfileContainer)
+    withRouter, withAuthRedirect)(ProfileContainer)
 
 

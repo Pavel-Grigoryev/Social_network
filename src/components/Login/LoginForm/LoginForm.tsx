@@ -5,14 +5,13 @@ import {schema} from "../../../utils/validators/validators";
 import s from './LoginForm.module.css'
 
 
-export const LoginForm = ({onSubmitLogin}: LoginFormPropsType) => {
-
-
+export const LoginForm = ({onSubmitLogin, captcha}: LoginFormPropsType) => {
     const {register, handleSubmit, setError, clearErrors, formState: {errors}} = useForm<LoginFormInputs>({
         defaultValues: {
             email: '',
             password: '',
-            rememberMe: false
+            rememberMe: false,
+            captcha: ''
         },
         resolver: yupResolver(schema),
     });
@@ -50,6 +49,12 @@ export const LoginForm = ({onSubmitLogin}: LoginFormPropsType) => {
                 <input type={'checkbox'} {...register("rememberMe")}/>
                 Remember me
             </label>
+            {captcha && (
+                <label>
+                    <img src={captcha} alt={"captcha"}/>
+                    <input type={'text'} placeholder={'enter a captcha'} {...register('captcha')}/>
+                </label>
+            )}
             {errors.serverError?.type === "500" && <p>{errors.serverError.message}</p>}
             <button type={'submit'}>Login</button>
         </form>
@@ -63,9 +68,11 @@ export type LoginFormInputs = {
     email: string
     password: string
     rememberMe: false,
-    serverError: string
+    serverError: string,
+    captcha: string | null
 }
 
 type LoginFormPropsType = {
     onSubmitLogin: (data: LoginFormInputs) => Promise<string>
+    captcha: string | null
 }

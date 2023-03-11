@@ -8,7 +8,8 @@ import {compose} from "redux";
 
 const mapStateToProps = (state: AppStateType): MapStateToPropsType => {
     return {
-        isAuth: state.auth.isAuth
+        isAuth: state.auth.isAuth,
+        captcha: state.auth.captcha
     }
 
 };
@@ -19,6 +20,7 @@ export const LoginContainer = compose<ComponentType>(connect(mapStateToProps, {l
 
 type MapStateToPropsType = {
     isAuth: boolean
+    captcha: string | null
 }
 
 type mapDispatchToPropsType = {

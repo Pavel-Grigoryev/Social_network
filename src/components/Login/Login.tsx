@@ -16,7 +16,7 @@ export const Login: React.FC<LoginPropsType>= (props) => {
     return (
         <div>
             <h1>LOGIN</h1>
-            <LoginForm onSubmitLogin={onSubmitHandler}/>
+            <LoginForm onSubmitLogin={onSubmitHandler} captcha={props.captcha}/>
         </div>
     );
 };
@@ -28,4 +28,5 @@ export type LoginFormDataType = {
     email: string
     password: string
     rememberMe: boolean
+    captcha: string | null
 }
