@@ -1,20 +1,19 @@
 import {AppThunk} from "./redux-store";
-import {authUserAPI} from "../api/api";
-import {handleServerAppError, handleServerNetworkError} from "../utils/error-utils";
+import {handleServerNetworkError} from "../utils/error-utils";
 import {AxiosError} from "axios";
 import {getAuthMe} from "./auth-reducer";
 
 const initialState  = {
-    isInitialized: false
+    isInitialized: false,
+    error: ''
 }
 
 export const appReducer = (state = initialState, action: ActionsTypesApp): InitialStateType => {
     switch (action.type) {
         case "APP/SET-INITIALIZED":
-            return {
-                ...state,
-                isInitialized: true
-            }
+            return {...state, isInitialized: true}
+        case "APP/SET-ERROR":
+            return {...state, error: action.error}
         default:
             return state;
     }
@@ -28,10 +27,14 @@ export const setAppInitialized = () => ({
     type: "APP/SET-INITIALIZED"
 }) as const;
 
+const setAppErrorAC = (error: string = '') => ({
+    type: "APP/SET-ERROR",
+    error
+}) as const;
+
 //Thunks
 
-export const initializeApp = (): AppThunk => {
-    return (dispatch) => {
+export const initializeApp = (): AppThunk => (dispatch) => {
         try {
             const res = dispatch(getAuthMe());
             dispatch(setAppInitialized());
@@ -40,15 +43,23 @@ export const initializeApp = (): AppThunk => {
             return handleServerNetworkError(err);
         }
     }
-}
+
+export const setAppError = (error: string): AppThunk => (dispatch) => {
+        dispatch(setAppErrorAC(error));
+        setTimeout(() => {
+            dispatch(setAppErrorAC());
+        }, 3000)
+    }
+
 
 //Types
 
 type InitialStateType = typeof initialState;
 
-type setAppInitializedAT = ReturnType<typeof setAppInitialized>
+type SetAppInitializedAT = ReturnType<typeof setAppInitialized>
+type SetAppErrorAT = ReturnType<typeof setAppErrorAC>
 
-type ActionsTypesApp = setAppInitializedAT;
+type ActionsTypesApp = SetAppInitializedAT | SetAppErrorAT;
 
 
 
