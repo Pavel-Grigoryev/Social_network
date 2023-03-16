@@ -1,0 +1,23 @@
+.header {
+    background-color: var(--palette-primary) !important;
+    padding: 0 16px !important;
+}
+
+.loginBlock {
+    float: right;
+}
+
+.avaBlock {
+    display: flex;
+    align-items: center;
+    column-gap: 15px;
+}
+
+.button:hover {
+    color: var(--palette-third) !important;
+    border-color: var(--palette-third) !important;
+}
+
+.loginBlock a {
+    color: #fff;
+}

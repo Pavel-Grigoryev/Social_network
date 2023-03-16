@@ -1,7 +1,7 @@
 import {Dispatch} from "redux";
 import {profileAPI} from "../api/api";
 import {ProfilePayloadType} from "../components/Profile/ProfileInfo/ProfileDataForm/ProfileDataForm";
-import {AppThunk} from "./redux-store";
+import {AppThunk} from "../types/types";
 import {AxiosError} from "axios";
 import {handleServerAppError, handleServerNetworkError} from "../utils/error-utils";
 
@@ -39,7 +39,6 @@ export const profileReducer = (state = initialState, action: ActionsTypesProfile
         case "PROFILE/UPDATE-PROFILE-DATA-STATUS":
             return {...state, profileDataStatus: action.profileDataStatus}
         case "PROFILE/SAVE-PHOTOS-SUCCESS":
-            debugger
             return {...state, profile: {...state.profile, photos: action.photos} as ProfileType | null}
         default:
             return state;
@@ -84,6 +83,7 @@ export const changeUserStatusAC = (status: string) => (
 export const getUserStatus = (userId: number) => async (dispatch: Dispatch<ActionsTypesProfile>) => {
     const res = await profileAPI.getStatus(userId);
     dispatch(setUserStatusAC(res.data));
+    return res
 }
 
 export const changeUserStatus = (status: string) => async (dispatch: Dispatch<ActionsTypesProfile>) => {
@@ -93,10 +93,11 @@ export const changeUserStatus = (status: string) => async (dispatch: Dispatch<Ac
     }
 }
 
-export const getUserProfile = (userId: number) => async (dispatch: Dispatch<ActionsTypesProfile>) => {
-    const res = await profileAPI.getProfile(userId)
-    dispatch(setUserProfileAC(res));
-}
+export const getUserProfile = (userId: number): AppThunk<Promise<ProfileType>> => async (dispatch, getState) => {
+        const res = await profileAPI.getProfile(userId)
+        dispatch(setUserProfileAC(res));
+        return res
+    }
 
 export const updateUserProfile = (data: ProfilePayloadType): AppThunk => async (dispatch, getState) => {
     try {
@@ -107,21 +108,18 @@ export const updateUserProfile = (data: ProfilePayloadType): AppThunk => async (
                 dispatch(setProfileDataStatusAC("succeeded"));
                 dispatch(getUserProfile(userId));
             } else {
-                debugger
                 dispatch(setProfileDataStatusAC("failed"));
                 return Promise.reject(handleServerAppError(res.data));
             }
         }
     } catch (e) {
-        debugger
         dispatch(setProfileDataStatusAC("failed"));
         const err = e as Error | AxiosError;
-        return  Promise.reject(handleServerNetworkError(err));
+        return Promise.reject(handleServerNetworkError(err));
     }
 }
 
 export const savePhoto = (file: any) => async (dispatch: Dispatch<ActionsTypesProfile>) => {
-    debugger
     const res = await profileAPI.savePhoto(file)
     dispatch(savePhotoSuccessAC(res.data.data.photos));
 

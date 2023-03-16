@@ -1,4 +1,4 @@
-import {AppStateType} from "./redux-store";
+import {AppStateType} from "../types/types";
 
 export const getUsersSel = (state: AppStateType) => state.usersPage.users;
 export const getPageSize = (state: AppStateType) => state.usersPage.pageSize;

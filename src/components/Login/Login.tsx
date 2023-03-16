@@ -2,6 +2,7 @@ import React from 'react';
 import {LoginForm} from "./LoginForm/LoginForm";
 import {LoginPropsType} from "./LoginContainer";
 import {Redirect} from "react-router-dom";
+import s from "./Login.module.css"
 
 
 export const Login: React.FC<LoginPropsType>= (props) => {
@@ -14,9 +15,11 @@ export const Login: React.FC<LoginPropsType>= (props) => {
     }
 
     return (
-        <div>
-            <h1>LOGIN</h1>
-            <LoginForm onSubmitLogin={onSubmitHandler} captcha={props.captcha}/>
+        <div className={s.loginBlockWrapper}>
+            <div className={s.loginBlock}>
+                <h1 className={s.title}>LOGIN</h1>
+                <LoginForm onSubmitLogin={onSubmitHandler} captcha={props.captcha}/>
+            </div>
         </div>
     );
 };
@@ -28,5 +31,5 @@ export type LoginFormDataType = {
     email: string
     password: string
     rememberMe: boolean
-    captcha: string | null
+    captcha: string
 }

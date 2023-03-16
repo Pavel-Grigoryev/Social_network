@@ -5,14 +5,15 @@ import './index.css';
 import App from './App';
 import {HashRouter} from "react-router-dom";
 import {Provider} from "react-redux";
+import "./antd-theme/antd-customized.css";
 
 ReactDOM.render(
-        <HashRouter>
-            <Provider store={store}>
+    <HashRouter>
+        <Provider store={store}>
                 <App/>
-            </Provider>
-        </HashRouter>,  document.getElementById('root')
-    );
+        </Provider>
+    </HashRouter>, document.getElementById('root')
+);
 
 
 

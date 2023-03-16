@@ -1,4 +1,4 @@
-import {AppThunk} from "./redux-store";
+import {AppThunk} from "../types/types";
 import {handleServerNetworkError} from "../utils/error-utils";
 import {AxiosError} from "axios";
 import {getAuthMe} from "./auth-reducer";

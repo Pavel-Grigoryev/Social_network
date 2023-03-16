@@ -2,11 +2,34 @@
 .form {
     display: flex;
     flex-direction: column;
-    width: 200px;
+    row-gap: 30px;
+    width: 300px;
+}
+
+.formItem {
+    position: relative;
+}
+
+.formCaptcha {
+    text-align: center;
+}
+
+.imgCaptcha {
+    margin-bottom: 30px;
 }
 
 .error {
     margin: 7px 0;
+    position: absolute;
+    left: 11px;
+    top: 32px;
     font-size: 14px;
-    color: var(--palette-second);
+    color: var(--palette-primary);
+}
+
+.servError {
+    color: var(--palette-primary);
+    position: absolute;
+    left: 0;
+    top: 50px;
 }

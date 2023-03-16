@@ -26,13 +26,10 @@ export const ProfileDataForm = ({
     const onSubmit: SubmitHandler<ProfilePayloadType> = async (data) => {
         try {
             const res = await onSubmitProfileDate(data);
-            debugger
         } catch (err) {
-            debugger
             const errors = err as string[] | string
             if (typeof errors !== "string") {
                 errors.map(e => {
-                    debugger
                     const fieldName = e.substring(e.indexOf('>') + 1, e.indexOf(')')).toLowerCase()
                     setError(`contacts.${fieldName as keyof ContactType}`, {
                         type: "serverError",
@@ -40,7 +37,6 @@ export const ProfileDataForm = ({
                     })
                 })
             } else {
-                debugger
                 setError("networkError", {
                     type: "networkError",
                     message: errors

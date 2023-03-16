@@ -1,8 +1,4 @@
 
-
-
-
-
 let  initialState: MessagesPageType = {
     dialogs: [
         {id: 1, name: "Pavel"},

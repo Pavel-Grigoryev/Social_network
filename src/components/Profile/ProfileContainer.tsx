@@ -1,7 +1,6 @@
 import React from "react";
 import Profile from "./Profile";
 import {connect} from "react-redux";
-import {AppStateType} from "../../redux/redux-store";
 import {
     getUserProfile,
     ProfileType,
@@ -14,6 +13,7 @@ import {RouteComponentProps, withRouter} from "react-router-dom";
 import {compose} from "redux";
 import {ProfilePayloadType} from "./ProfileInfo/ProfileDataForm/ProfileDataForm";
 import {withAuthRedirect} from "../../HOC/withAuthRedirect";
+import {AppStateType} from "../../types/types";
 
 
 class ProfileContainer extends React.Component<ProfileContainerPropsType> {

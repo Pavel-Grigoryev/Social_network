@@ -2,7 +2,7 @@ import React, {ComponentType} from 'react';
 import {loginAuthUser} from "../../redux/auth-reducer";
 import {Login, LoginFormDataType} from "./Login";
 import {connect} from "react-redux";
-import {AppStateType} from "../../redux/redux-store";
+import {AppStateType} from "../../types/types";
 import {compose} from "redux";
 
 
@@ -20,7 +20,7 @@ export const LoginContainer = compose<ComponentType>(connect(mapStateToProps, {l
 
 type MapStateToPropsType = {
     isAuth: boolean
-    captcha: string | null
+    captcha: string
 }
 
 type mapDispatchToPropsType = {

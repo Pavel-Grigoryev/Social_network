@@ -1,12 +1,13 @@
 import React from "react";
-import {SubmitHandler, useForm} from "react-hook-form";
+import {Controller, SubmitHandler, useForm} from "react-hook-form";
 import {yupResolver} from "@hookform/resolvers/yup";
 import {schema} from "../../../utils/validators/validators";
-import s from './LoginForm.module.css'
+import s from './LoginForm.module.css';
+import {Button, Checkbox, Input} from 'antd';
 
 
 export const LoginForm = ({onSubmitLogin, captcha}: LoginFormPropsType) => {
-    const {register, handleSubmit, setError, clearErrors, formState: {errors}} = useForm<LoginFormInputs>({
+    const {handleSubmit, setError, clearErrors, formState: {errors}, control} = useForm<LoginFormInputs>({
         defaultValues: {
             email: '',
             password: '',
@@ -19,10 +20,6 @@ export const LoginForm = ({onSubmitLogin, captcha}: LoginFormPropsType) => {
     const onSubmit: SubmitHandler<LoginFormInputs> = async (data) => {
         try {
             const res = await onSubmitLogin(data);
-            setError('serverError', {
-                type: "500",
-                message: res
-            })
         } catch (e) {
             setError('serverError', {
                 type: "500",
@@ -30,33 +27,46 @@ export const LoginForm = ({onSubmitLogin, captcha}: LoginFormPropsType) => {
             })
         } finally {
             setTimeout(() => {
-               clearErrors("serverError");
-            }, 7000)
+                clearErrors("serverError");
+            }, 7000);
         }
     }
 
     return (
         <form className={s.form} onSubmit={handleSubmit(onSubmit)}>
-            <label>
-                <input placeholder={'email'} {...register("email")} />
+            <label className={s.formItem}>
+                <Controller control={control}
+                            name="email"
+                            render={({field}) => <Input placeholder={'email'} {...field}/>}/>
+                {errors.email && <div className={s.error}>{errors.email.message}</div>}
             </label>
-            {errors.email && <div className={s.error}>{errors.email.message}</div>}
-            <label>
-                <input placeholder={'password'} type={'password'} {...register("password")}/>
+
+            <label className={s.formItem}>
+                <Controller control={control}
+                            name="password"
+                            render={({field}) => <Input.Password placeholder={"password"} {...field} />}/>
+                {errors.password && <div className={s.error}>{errors.password.message}</div>}
             </label>
-            {errors.password && <div className={s.error}>{errors.password.message}</div>}
             <label>
-                <input type={'checkbox'} {...register("rememberMe")}/>
-                Remember me
+                <Controller control={control}
+                            name="rememberMe"
+                            render={({field: {value, onChange}}) => <Checkbox checked={value}
+                                                                              onChange={(e) => {
+                                                                                  onChange(e.target.checked);
+                                                                              }}>Remember me</Checkbox>}/>
             </label>
             {captcha && (
-                <label>
-                    <img src={captcha} alt={"captcha"}/>
-                    <input type={'text'} placeholder={'enter a captcha'} {...register('captcha')}/>
+                <label className={s.formCaptcha}>
+                    <img className={s.imgCaptcha} src={captcha} alt={"captcha"}/>
+                    <Controller control={control}
+                                name="captcha"
+                                render={({field}) => <Input placeholder={'enter a captcha'} {...field}/>}/>
                 </label>
             )}
-            {errors.serverError?.type === "500" && <p>{errors.serverError.message}</p>}
-            <button type={'submit'}>Login</button>
+            <label className={s.formItem}>
+                <Button className={s.button} type="primary" size={'large'} htmlType={'submit'} block>Login</Button>
+                {errors.serverError?.type === "500" && <div className={s.servError}>{errors.serverError.message}</div>}
+            </label>
         </form>
     )
 }
@@ -69,10 +79,10 @@ export type LoginFormInputs = {
     password: string
     rememberMe: false,
     serverError: string,
-    captcha: string | null
+    captcha: string
 }
 
 type LoginFormPropsType = {
     onSubmitLogin: (data: LoginFormInputs) => Promise<string>
-    captcha: string | null
+    captcha: string
 }

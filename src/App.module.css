@@ -8,9 +8,13 @@
     /*grid-gap: 10px;*/
 }
 
+.navAside {
+    background-color: var(--palette-third) !important;
+}
+
 .appWrapperContent {
-    grid-area: content;
-    background-color: #f8f8f8;
+    background-color: var(--palette-second);
+    min-height: calc(100vh - 64px) !important;
 }
 
 .preloader {

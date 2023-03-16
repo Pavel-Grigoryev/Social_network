@@ -1,7 +1,10 @@
 
 :root {
-  --palette-second: #ec4d3b;
+  --palette-primary: #ec4d3b;
+  --palette-second: #f8f8f8;
+  --palette-third: #363940;
   --palette-white: #fff;
+  --palette-wildBlueYonder: #94b1c7;
 }
 
 body {
