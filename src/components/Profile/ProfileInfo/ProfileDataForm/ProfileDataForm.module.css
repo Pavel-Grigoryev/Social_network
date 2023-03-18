@@ -1,0 +1,17 @@
+.formBlock {
+    display: flex;
+    flex-direction: column;
+    row-gap: 27px;
+}
+
+.textArea {
+    resize: none;
+}
+
+.inputBlock {
+    position: relative;
+}
+
+.areaError {
+    top:58px
+}

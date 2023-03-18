@@ -44,8 +44,6 @@ class ProfileContainer extends React.Component<ProfileContainerPropsType> {
         return (
             <div>
                 <Profile  {...this.props} profile={this.props.profile}
-                          status={this.props.status}
-                          changeUserStatus={this.props.changeUserStatus}
                           isOwner={!this.props.match.params.userId}
                           savePhoto={this.props.savePhoto}
                           profileDataStatus={this.props.profileDataStatus}
@@ -74,7 +72,7 @@ type mapDispatchToPropsType = {
     getUserProfile: (userId: number | null) => void
     getUserStatus: (userId: number | null) => void
     changeUserStatus: (status: string) => void
-    savePhoto: (file: any) => void
+    savePhoto: (file: File) => Promise<string>
     setProfileDataStatusAC: (dataStatus: ProfileDataStatusType) => void
     updateUserProfile: (data: ProfilePayloadType) => void
 }

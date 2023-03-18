@@ -48,7 +48,7 @@ export const profileAPI = {
         return instance.put<CommonResponseType>(`profile`, date)
     },
 
-    savePhoto(file: any) {
+    savePhoto(file: File) {
         let formData = new FormData();
         formData.append("image", file)
         return instance.put<CommonResponseType<PhotosResponseDataType>>(`profile/photo`, formData, {

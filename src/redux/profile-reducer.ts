@@ -1,9 +1,9 @@
-import {Dispatch} from "redux";
 import {profileAPI} from "../api/api";
 import {ProfilePayloadType} from "../components/Profile/ProfileInfo/ProfileDataForm/ProfileDataForm";
 import {AppThunk} from "../types/types";
 import {AxiosError} from "axios";
 import {handleServerAppError, handleServerNetworkError} from "../utils/error-utils";
+import {setAvatar} from "./auth-reducer";
 
 let initialState = {
     posts: [
@@ -13,7 +13,8 @@ let initialState = {
     ] as PostType[],
     profile: null as ProfileType | null,
     status: '',
-    profileDataStatus: 'idle' as ProfileDataStatusType
+    profileDataStatus: 'idle' as ProfileDataStatusType,
+    dataStatus: 'idle' as ProfileDataStatusType,
 }
 
 export const profileReducer = (state = initialState, action: ActionsTypesProfile): InitialStateType => {
@@ -33,9 +34,9 @@ export const profileReducer = (state = initialState, action: ActionsTypesProfile
             return {...state, profile: action.profile};
         }
         case "PROFILE/SET-USER-STATUS":
-            return {...state, status: action.status}
-        case "PROFILE/CHANGE-USER-STATUS":
-            return {...state, status: action.status}
+        case "PROFILE/CHANGE-USER-DATA-STATUS":
+        case "PROFILE/CHANGE-USER-ENTITY-STATUS":
+            return {...state, ...action.payload}
         case "PROFILE/UPDATE-PROFILE-DATA-STATUS":
             return {...state, profileDataStatus: action.profileDataStatus}
         case "PROFILE/SAVE-PHOTOS-SUCCESS":
@@ -68,32 +69,55 @@ export const setUserProfileAC = (profile: ProfileType) => (
 export const setUserStatusAC = (status: string) => (
     {
         type: "PROFILE/SET-USER-STATUS",
-        status
+        payload:{status}
     }) as const;
 
-export const changeUserStatusAC = (status: string) => (
+export const changeUserDataStatusAC = (profileDataStatus: ProfileDataStatusType) => (
     {
-        type: "PROFILE/CHANGE-USER-STATUS",
-        status
+        type: "PROFILE/CHANGE-USER-DATA-STATUS",
+        payload: {profileDataStatus}
+    }) as const;
+
+/***
+ * change value when user's status loading from server
+ *
+ */
+export const changeUserEntityStatusAC = (dataStatus: ProfileDataStatusType) => (
+    {
+        type: "PROFILE/CHANGE-USER-ENTITY-STATUS",
+        payload: {dataStatus}
     }) as const;
 
 
 //Thunks
 
-export const getUserStatus = (userId: number) => async (dispatch: Dispatch<ActionsTypesProfile>) => {
-    const res = await profileAPI.getStatus(userId);
-    dispatch(setUserStatusAC(res.data));
-    return res
+export const getUserStatus = (userId: number): AppThunk => async (dispatch) => {
+        const res = await profileAPI.getStatus(userId);
+        dispatch(setUserStatusAC(res.data));
+        return res
+
 }
 
-export const changeUserStatus = (status: string) => async (dispatch: Dispatch<ActionsTypesProfile>) => {
-    const res = await profileAPI.changeStatus(status)
-    if (res.data.resultCode === 0) {
-        dispatch(changeUserStatusAC(status));
+export const changeUserStatus = (status: string): AppThunk => async (dispatch) => {
+    try {
+        dispatch(changeUserEntityStatusAC('loading'));
+        const res = await profileAPI.changeStatus(status)
+        if (res.data.resultCode === 0) {
+            dispatch(setUserStatusAC(status));
+            dispatch(changeUserEntityStatusAC('succeeded'));
+        } else {
+            dispatch(setProfileDataStatusAC("failed"));
+            return Promise.reject(handleServerAppError(res.data));
+        }
+    } catch (e) {
+        dispatch(changeUserEntityStatusAC("failed"));
+        const err = e as Error | AxiosError;
+        return Promise.reject(handleServerNetworkError(err));
     }
+
 }
 
-export const getUserProfile = (userId: number): AppThunk<Promise<ProfileType>> => async (dispatch, getState) => {
+export const getUserProfile = (userId: number): AppThunk<Promise<ProfileType>> => async (dispatch) => {
         const res = await profileAPI.getProfile(userId)
         dispatch(setUserProfileAC(res));
         return res
@@ -119,10 +143,20 @@ export const updateUserProfile = (data: ProfilePayloadType): AppThunk => async (
     }
 }
 
-export const savePhoto = (file: any) => async (dispatch: Dispatch<ActionsTypesProfile>) => {
-    const res = await profileAPI.savePhoto(file)
-    dispatch(savePhotoSuccessAC(res.data.data.photos));
-
+export const savePhoto = (file: File): AppThunk<Promise<string>> => async (dispatch) => {
+    try {
+        const res = await profileAPI.savePhoto(file);
+        if (res.data.resultCode === 0) {
+            dispatch(savePhotoSuccessAC(res.data.data.photos));
+            dispatch(setAvatar(res.data.data.photos.small));
+            return Promise.resolve('Upload successful')
+        } else {
+            return Promise.reject(handleServerAppError(res.data));
+        }
+    } catch (e) {
+        const err = e as Error | AxiosError;
+        return Promise.reject(handleServerNetworkError(err));
+    }
 }
 
 
@@ -160,10 +194,11 @@ type ActionsTypesProfile =
     ReturnType<typeof addPostAC>
     | ReturnType<typeof setUserProfileAC>
     | ReturnType<typeof setUserStatusAC>
-    | ReturnType<typeof changeUserStatusAC>
+    | ReturnType<typeof changeUserDataStatusAC>
     | ReturnType<typeof deletePostAC>
     | ReturnType<typeof savePhotoSuccessAC>
     | ReturnType<typeof setProfileDataStatusAC>
+    | ReturnType<typeof changeUserEntityStatusAC>
     ;
 
 

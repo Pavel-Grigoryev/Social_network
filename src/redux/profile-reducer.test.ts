@@ -15,7 +15,8 @@ beforeEach(() => {
         ] as PostType[],
         profile: {} as ProfileType,
         status: '',
-        profileDataStatus: 'idle' as ProfileDataStatusType
+        profileDataStatus: 'idle' as ProfileDataStatusType,
+        dataStatus: 'idle' as ProfileDataStatusType
     }
 })
 

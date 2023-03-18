@@ -5,3 +5,12 @@
 .profileImg {
     width: 120px;
 }
+
+.statusTitle {
+    margin-right: 15px;
+}
+
+.uploadBlock {
+    margin: 30px 0;
+    max-width: 200px;
+}

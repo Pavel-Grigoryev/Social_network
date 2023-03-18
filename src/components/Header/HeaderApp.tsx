@@ -1,7 +1,7 @@
 import React from "react";
 import s from './HeaderApp.module.css'
 import asp from './Aspire.png'
-import {NavLink} from "react-router-dom";
+import {Link} from "react-router-dom";
 import {Avatar, Button, Col, Row} from "antd";
 import {Header} from "antd/es/layout/layout";
 import {useAppSelector} from "../../hooks/useAppSelector";
@@ -29,10 +29,10 @@ export const HeaderApp = () => {
             <Row justify={'space-between'} align={'middle'}>
                 <Col span={3}>
                     <div className="logo">
-                        <NavLink to={PATH.MAIN}><img
+                        <Link to={PATH.MAIN}><img
                             src={asp}
                             alt=""/>
-                        </NavLink>
+                        </Link>
 
                     </div>
                 </Col>
@@ -40,14 +40,14 @@ export const HeaderApp = () => {
                     <div className={s.loginBlock}>
                         {isAuth ?
                             <div className={s.avaBlock}>
-                                {avatar ? <Avatar size="large" src={avatar}/> :
-                                    <Avatar size="large" icon={<UserOutlined/>}/>}
+                                {avatar ? <Link to={PATH.PROFILE}> <Avatar size="large" src={avatar}/> </Link> :
+                                    <Link to={PATH.PROFILE}><Avatar size="large" icon={<UserOutlined/>}/></Link>}
                                 <Button className={s.button} onClick={logoutHandler} type="default" ghost>
                                     Logout
                                 </Button>
                             </div> :
                             <Button className={s.button} onClick={logoutHandler} type="default" ghost>
-                                <NavLink to={PATH.LOGIN}>Login</NavLink>
+                                <Link to={PATH.LOGIN}>Login</Link>
                             </Button>
 
                         }

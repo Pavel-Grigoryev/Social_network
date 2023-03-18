@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React from "react";
 import s from './Navbar.module.css';
 import {NavLink, useLocation} from "react-router-dom";
 import {Menu, MenuProps} from "antd";
@@ -42,24 +42,14 @@ const menuStyle = {
 
 export const Navbar = () => {
     const location = useLocation();
-    const [locat, setLocat] = useState('');
-
-    useEffect(() => {
-        if (location.pathname === "/") {
-            debugger
-            setLocat('/profile')
-            return
-        }
-        setLocat(location.pathname)
-    })
-    console.log(locat)
     return (
         <Menu
             mode="inline"
-            defaultSelectedKeys={[locat]}
+           defaultSelectedKeys={[PATH.PROFILE]}
             style={menuStyle}
             items={itemsMenu}
             className={s.nav}
+            selectedKeys={[location.pathname]}
         />
     );
 }

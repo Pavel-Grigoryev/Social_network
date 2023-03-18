@@ -1,6 +1,8 @@
 import {ContactType, ProfileDataStatusType, ProfileType} from "../../../../redux/profile-reducer";
 import {Contact} from "../Contact/Contact";
 import React from "react";
+import {Button} from "antd";
+import s from "./ProfileData.module.css"
 
 type ProfileDataType = {
     profile: ProfileType
@@ -17,8 +19,8 @@ export const ProfileData = ({
     }
 
     return (
-        <div>
-            {isOwner && <button onClick={setProfileDataStatusHandler}>Edit profile</button>}
+        <div className={s.profileData}>
+            {isOwner && <Button style={{maxWidth:"180px"}} onClick={setProfileDataStatusHandler}>Edit profile</Button>}
             <div>
                 <b>Full name</b>: {profile.fullName}
             </div>
