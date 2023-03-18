@@ -3,6 +3,10 @@
   margin-bottom: 20px;
 }
 
+.avatar {
+  margin-right: 15px;
+}
+
 .item img{
   width: 50px;
   border-radius: 50%;

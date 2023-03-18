@@ -10,12 +10,15 @@ import {useAppDispatch} from "../../hooks/useAppDispatch";
 import {logoutAuthUser} from "../../redux/auth-reducer";
 import {UserOutlined} from '@ant-design/icons';
 import {PATH} from "../../routes/routes";
+import {AppProgress} from "../common/AppProgress/AppProgress";
+import {selectAppStatus} from "../../redux/app-selectors";
 
 
 export const HeaderApp = () => {
 
     const isAuth = useAppSelector(selectIsAuth);
     const avatar = useAppSelector(selectAva);
+    const appStatus = useAppSelector(selectAppStatus);
 
 
     const dispatch = useAppDispatch();
@@ -54,6 +57,7 @@ export const HeaderApp = () => {
                     </div>
                 </Col>
             </Row>
+            {appStatus ==="loading" && <AppProgress/>}
         </Header>
     )
 }

@@ -1,6 +1,7 @@
 .header {
     background-color: var(--palette-primary) !important;
     padding: 0 16px !important;
+    position: relative;
 }
 
 .loginBlock {

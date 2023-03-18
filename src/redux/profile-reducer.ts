@@ -4,6 +4,7 @@ import {AppThunk} from "../types/types";
 import {AxiosError} from "axios";
 import {handleServerAppError, handleServerNetworkError} from "../utils/error-utils";
 import {setAvatar} from "./auth-reducer";
+import {setAppStatusAC} from "./app-reducer";
 
 let initialState = {
     posts: [
@@ -107,12 +108,12 @@ export const changeUserStatus = (status: string): AppThunk => async (dispatch) =
             dispatch(changeUserEntityStatusAC('succeeded'));
         } else {
             dispatch(setProfileDataStatusAC("failed"));
-            return Promise.reject(handleServerAppError(res.data));
+            return Promise.reject(handleServerAppError(res.data, dispatch));
         }
     } catch (e) {
         dispatch(changeUserEntityStatusAC("failed"));
         const err = e as Error | AxiosError;
-        return Promise.reject(handleServerNetworkError(err));
+        return Promise.reject(handleServerNetworkError(err, dispatch));
     }
 
 }
@@ -125,21 +126,23 @@ export const getUserProfile = (userId: number): AppThunk<Promise<ProfileType>> =
 
 export const updateUserProfile = (data: ProfilePayloadType): AppThunk => async (dispatch, getState) => {
     try {
+        dispatch(setAppStatusAC('loading'));
         const userId = getState().profilePage.profile?.userId;
         if (userId) {
             const res = await profileAPI.updateProfile(data)
             if (res.data.resultCode === 0) {
                 dispatch(setProfileDataStatusAC("succeeded"));
+                dispatch(setAppStatusAC('succeeded'));
                 dispatch(getUserProfile(userId));
             } else {
                 dispatch(setProfileDataStatusAC("failed"));
-                return Promise.reject(handleServerAppError(res.data));
+                return Promise.reject(handleServerAppError(res.data, dispatch));
             }
         }
     } catch (e) {
         dispatch(setProfileDataStatusAC("failed"));
         const err = e as Error | AxiosError;
-        return Promise.reject(handleServerNetworkError(err));
+        return Promise.reject(handleServerNetworkError(err, dispatch));
     }
 }
 
@@ -151,11 +154,11 @@ export const savePhoto = (file: File): AppThunk<Promise<string>> => async (dispa
             dispatch(setAvatar(res.data.data.photos.small));
             return Promise.resolve('Upload successful')
         } else {
-            return Promise.reject(handleServerAppError(res.data));
+            return Promise.reject(handleServerAppError(res.data, dispatch));
         }
     } catch (e) {
         const err = e as Error | AxiosError;
-        return Promise.reject(handleServerNetworkError(err));
+        return Promise.reject(handleServerNetworkError(err, dispatch));
     }
 }
 

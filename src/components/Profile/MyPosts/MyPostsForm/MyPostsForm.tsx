@@ -1,10 +1,13 @@
 import React from "react";
-import {Field, InjectedFormProps, reduxForm} from "redux-form";
-import { useForm, SubmitHandler } from "react-hook-form";
+import {useForm, SubmitHandler, Controller} from "react-hook-form";
+import {Button, Input} from "antd";
+import s from "./MyPostsForm.module.css"
+
+const {TextArea} = Input;
 
 export const MyPostsForm = ({onPostChange}: MyPostsFormPropsType) => {
 
-    const { register, handleSubmit, reset } = useForm<MyPostsFormInput>();
+    const { control, handleSubmit, reset } = useForm<MyPostsFormInput>();
     const onSubmit: SubmitHandler<MyPostsFormInput> = (data) => {
         onPostChange(data);
         reset();
@@ -14,10 +17,12 @@ export const MyPostsForm = ({onPostChange}: MyPostsFormPropsType) => {
     return (
         <form onSubmit={handleSubmit(onSubmit)}>
             <div>
-                <textarea {...register("newPost")} />
+                <Controller control={control} name="newPost"
+                            render={({field}) => <TextArea className={s.textArea}
+                                                           {...field}/>}/>
             </div>
             <div>
-                <button type={'submit'}>Add post</button>
+                <Button style={{maxWidth: "180px"}} htmlType={'submit'}>Add post</Button>
             </div>
         </form>
     )

@@ -3,6 +3,7 @@ import s from './Users.module.css'
 import userPhoto from '../../assets/images/user.png'
 import {UserType} from "../../redux/users-reducer";
 import {NavLink} from "react-router-dom";
+import {Button, Col, Row} from "antd";
 
 type UsersPropsType = {
     user: UserType
@@ -13,9 +14,9 @@ type UsersPropsType = {
 
 export const User = ({user, followingInProgress, acceptUnFollow, acceptFollow}: UsersPropsType) => {
     return (
-        <div>
-                <span>
-                    <div>
+        <Row className={s.userBlock}>
+                <Col span={5}>
+                    <div className={s.imgBlock}>
                         <NavLink to={'/profile/' + user.id}>
                             <img src={user.photos.small != null ? user.photos.small : userPhoto} className={s.userImg}
                                  alt={"user's image"}/>
@@ -23,16 +24,16 @@ export const User = ({user, followingInProgress, acceptUnFollow, acceptFollow}: 
                     </div>
                     <div>
                         {user.followed ?
-                            <button disabled={followingInProgress.some(id => id === user.id)} onClick={() => {
+                            <Button disabled={followingInProgress.some(id => id === user.id)} onClick={() => {
                                 acceptUnFollow(user.id);
-                            }}>Unfollow</button> :
-                            <button disabled={followingInProgress.some(id => id === user.id)} onClick={() => {
+                            }}>Unfollow</Button> :
+                            <Button disabled={followingInProgress.some(id => id === user.id)} onClick={() => {
                                 acceptFollow(user.id);
-                            }}>Follow</button>
+                            }}>Follow</Button>
                         }
                     </div>
-                </span>
-            <span>
+                </Col>
+            <Col span={19}>
                     <span>
                         <div>{user.name}</div>
                         <div>{user.status}</div>
@@ -41,8 +42,8 @@ export const User = ({user, followingInProgress, acceptUnFollow, acceptFollow}: 
                         <div>{'u.location.country'}</div>
                         <div>{'u.location.city'}</div>
                     </span>
-                </span>
-        </div>
+                </Col>
+        </Row>
     )
 }
 

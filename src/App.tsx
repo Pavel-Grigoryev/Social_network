@@ -1,7 +1,7 @@
 import React, {ComponentType} from 'react';
 import './App.module.css';
 import {Navbar} from "./components/Navbar/Navbar";
-import {NavLink, Redirect, Route, Switch, withRouter} from "react-router-dom";
+import {Redirect, Route, Switch, withRouter} from "react-router-dom";
 import Music from "./components/Music/Music";
 import News from "./components/News/News";
 import Settings from "./components/Settings/Settings";
@@ -14,10 +14,9 @@ import {Preloader} from "./components/common/Preloader/Preloader";
 import s from "./App.module.css"
 import {withSuspense} from "./HOC/withSuspense";
 import {GlobalError} from "./components/common/GlobalError/GlobalError";
-//import 'antd/dist/antd.css';
 
-import { Breadcrumb, Layout, Menu } from 'antd';
-import type { MenuProps } from 'antd';
+import { Layout} from 'antd';
+
 import {HeaderApp} from "./components/Header/HeaderApp";
 import {AppStateType} from "./types/types";
 import {PATH} from "./routes/routes";
@@ -26,12 +25,7 @@ const MessagesContainer = React.lazy(() =>
 const ProfileContainer = React.lazy(() =>
     import('./components/Profile/ProfileContainer'));
 
-
-
-
-const { Header, Content, Sider, Footer } = Layout;
-
-
+const { Content, Sider, Footer } = Layout;
 
 class App extends React.Component<AppPropsType> {
 
@@ -49,11 +43,6 @@ class App extends React.Component<AppPropsType> {
     }
 
     render() {
-
-
-
-
-
         if (!this.props.isInitialized) {
             return (
                 <div className={s.preloader}>
@@ -63,7 +52,7 @@ class App extends React.Component<AppPropsType> {
         return (
             <Layout>
                 <HeaderApp/>
-                <Layout>
+                <Layout style={{position: 'relative'}}>
                     <Sider width={200}  style={{backgroundColor: '#363940'}} >
                       <Navbar/>
                     </Sider>
@@ -104,7 +93,7 @@ class App extends React.Component<AppPropsType> {
 const mapStateToProps = (state: AppStateType): MapStateToPropsType => {
     return {
         isInitialized: state.app.isInitialized,
-        error: state.app.error
+        error: state.app.error,
     }
 }
 

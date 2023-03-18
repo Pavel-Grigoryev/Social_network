@@ -73,11 +73,11 @@ export const loginAuthUser = (dataForm: LoginFormDataType): AppThunk => {
                 if (res.data.resultCode === 10) {
                     dispatch(getUserCaptcha())
                 }
-                return Promise.reject(handleServerAppError(res.data));
+                return Promise.reject(handleServerAppError(res.data, dispatch));
             }
         } catch (e) {
             const err = e as Error | AxiosError;
-            return handleServerNetworkError(err);
+            return handleServerNetworkError(err, dispatch);
         }
     }
 }
@@ -97,7 +97,7 @@ export const getUserCaptcha = (): AppThunk => async (dispatch) => {
         dispatch(setCaptcha(res.data.url));
     } catch (e) {
         const err = e as Error | AxiosError;
-        return handleServerNetworkError(err);
+        return handleServerNetworkError(err, dispatch);
     }
 }
 

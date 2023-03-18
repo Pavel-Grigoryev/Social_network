@@ -1,5 +1,7 @@
 import React from "react";
 import s from './Post.module.css'
+import { UserOutlined } from '@ant-design/icons';
+import { Avatar } from 'antd';
 
 type PostType = {
     message: string,
@@ -9,9 +11,7 @@ type PostType = {
 const Post:React.FC<PostType> = (props) => {
     return (
         <div className={s.item}>
-            <img
-                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQw9cnEvZ98kadKb7ZIhW20sXOTNVlEsH1q4Q&usqp=CAU"
-                alt=""/>
+            <Avatar size={50} icon={<UserOutlined />} className={s.avatar} />
             {props.message}
             <div>
                 <span>like {props.likeCount}</span>

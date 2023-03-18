@@ -1,0 +1,5 @@
+.textArea {
+    max-width: 250px!important;
+    resize: none;
+    margin-bottom: 15px;
+}

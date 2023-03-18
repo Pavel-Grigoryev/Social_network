@@ -2,10 +2,12 @@ import {AppThunk} from "../types/types";
 import {handleServerNetworkError} from "../utils/error-utils";
 import {AxiosError} from "axios";
 import {getAuthMe} from "./auth-reducer";
+import {ProfileDataStatusType} from "./profile-reducer";
 
-const initialState  = {
+const initialState = {
     isInitialized: false,
-    error: ''
+    error: '',
+    appStatus: 'idle' as ProfileDataStatusType,
 }
 
 export const appReducer = (state = initialState, action: ActionsTypesApp): InitialStateType => {
@@ -13,7 +15,8 @@ export const appReducer = (state = initialState, action: ActionsTypesApp): Initi
         case "APP/SET-INITIALIZED":
             return {...state, isInitialized: true}
         case "APP/SET-ERROR":
-            return {...state, error: action.error}
+        case "APP/SET-APP-STATUS":
+            return {...state, ...action.payload}
         default:
             return state;
     }
@@ -29,27 +32,32 @@ export const setAppInitialized = () => ({
 
 const setAppErrorAC = (error: string = '') => ({
     type: "APP/SET-ERROR",
-    error
+    payload: {error}
+}) as const;
+
+export const setAppStatusAC = (appStatus: ProfileDataStatusType) => ({
+    type: "APP/SET-APP-STATUS",
+    payload: {appStatus}
 }) as const;
 
 //Thunks
 
 export const initializeApp = (): AppThunk => (dispatch) => {
-        try {
-            const res = dispatch(getAuthMe());
-            dispatch(setAppInitialized());
-        } catch (e) {
-            const err = e as Error | AxiosError;
-            return handleServerNetworkError(err);
-        }
+    try {
+        const res = dispatch(getAuthMe());
+        dispatch(setAppInitialized());
+    } catch (e) {
+        const err = e as Error | AxiosError;
+        return handleServerNetworkError(err, dispatch);
     }
+}
 
 export const setAppError = (error: string): AppThunk => (dispatch) => {
-        dispatch(setAppErrorAC(error));
-        setTimeout(() => {
-            dispatch(setAppErrorAC());
-        }, 3000)
-    }
+    dispatch(setAppErrorAC(error));
+    setTimeout(() => {
+        dispatch(setAppErrorAC());
+    }, 3000)
+}
 
 
 //Types
@@ -58,8 +66,9 @@ type InitialStateType = typeof initialState;
 
 type SetAppInitializedAT = ReturnType<typeof setAppInitialized>
 type SetAppErrorAT = ReturnType<typeof setAppErrorAC>
+type SetAppStatusAT = ReturnType<typeof setAppStatusAC>
 
-type ActionsTypesApp = SetAppInitializedAT | SetAppErrorAT;
+type ActionsTypesApp = SetAppInitializedAT | SetAppErrorAT | SetAppStatusAT;
 
 
 
