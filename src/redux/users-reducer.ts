@@ -3,7 +3,7 @@ import {Dispatch} from "redux";
 
 let initialState = {
     users: [] as UserType[],
-    pageSize: 10,
+    pageSize: 20,
     totalUsersCount: 0,
     currentPage: 1,
     isFetching: false,

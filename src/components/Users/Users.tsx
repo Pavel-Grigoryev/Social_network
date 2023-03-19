@@ -19,7 +19,7 @@ export const Users = ({onPageChanged, currentPage, totalUsersCount, pageSize, ac
     return (
         <div>
             {props.users.map(u => <User key={u.id} user={u} acceptUnFollow={acceptUnFollow} acceptFollow={acceptFollow} followingInProgress={followingInProgress} />)}
-            <Paginator pageSize={pageSize} totalItemsCount={totalUsersCount} currentPage={currentPage} onPageChanged={onPageChanged} paginationGroupSize={10}/>
+            <Paginator pageSize={pageSize} totalItemsCount={totalUsersCount} currentPage={currentPage} onPageChanged={onPageChanged} />
         </div>
     )
 }

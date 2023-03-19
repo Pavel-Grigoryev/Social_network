@@ -78,9 +78,9 @@ test('users array should be added to initial state', () => {
         followingInProgress: []
     }
 
-    const action = setUsers(startStateEmpty.users);
+    const action = setUsers(startState.users);
 
-    const endState = userReducer(startState, action)
+    const endState = userReducer(startStateEmpty, action)
 
     expect(endState.users[0].name).toBe("Pavel");
     expect(endState.users[2].status).toBe("I am a pupil");
