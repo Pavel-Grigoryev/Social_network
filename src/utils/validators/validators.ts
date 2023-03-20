@@ -11,3 +11,7 @@ export const schemaProfile = yup.object().shape({
     aboutMe: yup.string().required('Required'),
     lookingForAJobDescription: yup.string().required('Required'),
 }).required();
+
+export const schemaMessage = yup.object().shape({
+    newMessageBody: yup.string().required('Required')
+}).required();

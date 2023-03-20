@@ -33,7 +33,6 @@ export const ProfileDataForm = ({
         try {
             const res = await onSubmitProfileDate(data);
         } catch (err) {
-            debugger
             const errors = err as string[] | string
             if (typeof errors !== "string") {
                 errors.map(e => {

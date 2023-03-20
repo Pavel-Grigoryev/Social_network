@@ -1,29 +1,40 @@
 
 import React from "react";
-import {SubmitHandler, useForm} from 'react-hook-form';
+import {Controller, SubmitHandler, useForm} from 'react-hook-form';
 import {yupResolver} from "@hookform/resolvers/yup";
-import {schema} from "../../../utils/validators/validators";
+import {schemaMessage} from "../../../utils/validators/validators";
+import {Input, Button} from "antd";
+import cn from "classnames";
+import s from "../../Login/LoginForm/LoginForm.module.css";
+import st from "./AddMessageForm.module.css"
+const {TextArea} = Input;
 
 export const AddMessageForm = ({addNewMessage}: AddMessageFormProps) => {
 
 
-    const {register, handleSubmit, reset} = useForm<MyPostsFormInputs>({
+    const {control, handleSubmit, reset, formState: {errors}} = useForm<MyPostsFormInputs>({
         defaultValues: {
             newMessageBody: ''
         },
-        resolver: yupResolver(schema),
+        resolver: yupResolver(schemaMessage),
     });
 
     const onSubmit: SubmitHandler<MyPostsFormInputs> = (data) => {
-        addNewMessage(data.newMessageBody);
+           addNewMessage(data.newMessageBody);
         reset();
     }
 
 
     return (
         <form onSubmit={handleSubmit(onSubmit)}>
-            <textarea  {...register("newMessageBody")} placeholder={"Enter your message"}/>
-            <button type={"submit"}>Add message</button>
+            <div className={st.textAreaBlock}>
+                <Controller control={control} name="newMessageBody"
+                             render={({field}) => <TextArea className={st.textArea}
+                                 placeholder={'Enter your message'} {...field}/>}/>
+                {errors.newMessageBody &&
+                    <div className={cn(s.error, st.areaError)}>{errors.newMessageBody.message}</div>}
+            </div>
+            <Button htmlType={'submit'}>Add message</Button>
         </form>
     )
 }

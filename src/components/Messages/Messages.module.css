@@ -1,6 +1,9 @@
 .dialogs {
     display: grid;
-    grid-template-columns: 2fr 10fr ;
+    grid-template-columns: 2fr 2fr 10fr;
+    grid-template-areas:
+            "names messages messages"
+             "form form form";
 
 }
 
@@ -8,6 +11,7 @@
     margin: 10px 5px 10px 10px;
     padding: 10px;
     background-color: #fff;
+    grid-area: names;
 }
 
 .dialog {
@@ -15,24 +19,26 @@
 }
 
 .dialog a {
-text-decoration: none;
+    text-decoration: none;
 }
 
 .dialog.active a {
-color: darkgoldenrod;
+    color: darkgoldenrod;
 }
 
 
 .addMessageBlock {
-    margin: 10px 5px 10px 10px;
+    margin: 30px 5px 10px 10px;
 }
 
 .messages {
     margin: 10px 10px 10px 5px;
     padding: 10px;
     background-color: #fff;
+    grid-area: messages;
 }
 
-.message {
-
+.addMessageBlock {
+    grid-area: form;
+    max-width: 300px;
 }
